@@ -1,6 +1,6 @@
 /*************************************************************
  *
- *  MathJax/extensions/TeX/xypic.js
+ *  xypic.js
  *
  *  Implements Xy-pic environment.
  *  
