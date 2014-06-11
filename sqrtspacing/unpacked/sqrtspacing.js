@@ -7,7 +7,7 @@
  *  To load it include
  *  
  *     MathJax.Hub.Config({
- *       extensions: ["[Contrib]/unpacked/sqrtspacing.js"],
+ *       extensions: ["[Contrib]/sqrtspacing/unpacked/sqrtspacing.js"],
  *     });
  *  
  *  in your configuration.
