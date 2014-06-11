@@ -4,7 +4,7 @@ A version of `sqrtspacing.js` for the [MathJax third party extension repository]
 
 # About sqrtspacing
 
-This extension improves the visual rendering of square roots by adding a little bit of padding between the root and a non-whitespace math symbol that precedes it or follows. This unglues visually the roots from the math around them.
+This extension improves the visual rendering of square roots by adding a little bit of padding between the root and a non-whitespace math symbol that precedes it or follows. This unglues visually the roots from the math around them. Works for both HTML_CSS and SVG renderers.
 
 References:
 
@@ -29,11 +29,11 @@ Then add the extension to your configuration like any other third party extensio
 You may download a version that can be used with earlier versions of MathJax from here:
 	https://github.com/evgenystan/sqrtspacing
 
-The file needs to be placed in the [MathJax]\extensions\HTML-CSS\ folder and loaded with the following configuration:
+The file needs to be placed in the [MathJax]\extensions\sqrtspacing\ folder and loaded with the following configuration:
 
      <script type="text/x-mathjax-config>
      MathJax.Hub.Config({
-       extensions: ["HTML-CSS/sqrtspacing.js"],
+       extensions: ["sqrtspacing/sqrtspacing.js"],
      });
      </script>
 
