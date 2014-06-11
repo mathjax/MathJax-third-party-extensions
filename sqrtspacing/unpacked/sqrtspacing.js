@@ -51,13 +51,15 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
 				}
 				if(core !== parent.data[m-1])
 				{
-					if ((parent.data[i+1].type!="mspace")&&
+					if ((parent.data[i+1].type!="mo")&&
+						(parent.data[i+1].type!="mspace")&&
 						(parent.data[i+1].type!="mphantom")&&
 						(values.rspace)) {span.style.paddingRight = HTMLCSS.Em(values.rspace)}
 				}
 				if(core !== parent.data[0])
 				{
-					if ((parent.data[i-1].type!="mspace")&&
+					if ((parent.data[i-1].type!="mo")&&
+						(parent.data[i-1].type!="mspace")&&
 						(parent.data[i-1].type!="mphantom")&&
 						(values.lspace)) {span.style.paddingLeft =  HTMLCSS.Em(values.lspace)}
 				}
@@ -95,13 +97,15 @@ MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
 				}
 				if(core !== parent.data[m-1])
 				{
-					if ((parent.data[i+1].type!="mspace")&&
+					if ((parent.data[i+1].type!="mo")&&
+						(parent.data[i+1].type!="mspace")&&
 						(parent.data[i+1].type!="mphantom")&&
 						(values.rspace)) {svg.X = values.rspace}
 				}
 				if(core !== parent.data[0])
 				{
-					if ((parent.data[i-1].type!="mspace")&&
+					if ((parent.data[i-1].type!="mo")&&
+						(parent.data[i-1].type!="mspace")&&
 						(parent.data[i-1].type!="mphantom")&&
 						(values.lspace)) {svg.x += values.lspace}
 				}
