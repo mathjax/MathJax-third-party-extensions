@@ -27,7 +27,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
 	var	HTMLCSS = MathJax.OutputJax["HTML-CSS"],
   		MML = MathJax.ElementJax.mml;
