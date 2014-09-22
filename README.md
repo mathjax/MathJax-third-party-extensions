@@ -39,8 +39,8 @@ or equivalently,
 
 in your configuration. See also the [documentation page on third party extensions and this repository](http://docs.mathjax.org/en/latest/options/ThirdParty.html#mathjax-third-party-extension-repository).
 
-## How-to
+## Writing extensions
 
-The MathJax documentation [has a tutorial](http://docs.mathjax.org/en/latest/extension-writing.html) on extension writing. 
+The MathJax documentation [contains a tutorial on extension writing](http://docs.mathjax.org/en/latest/extension-writing.html).
 
-After reading it, you might want to start by looking at some of the extensions here and [the MathJax core extensions](http://github.com/mathjax/mathjax/unpacked/extensions).
+Afterwards, you might want to start by looking at some of the extensions here and [the MathJax core extensions](http://github.com/mathjax/mathjax/unpacked/extensions).
