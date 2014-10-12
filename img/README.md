@@ -17,12 +17,16 @@ Provides a macro for embedding images in math.
 
 # Usage:
 
-    \img{URL}{vertical alignment}{width}{height}
+    \img[valign=<vertical alignment>,width=<width>,height=<height>]{URL}
+
+or
+
+    \img[<vertical alignment>][<width>][<height>]{URL}
 
 This adds an `\img` macro for inserting images into a MathJax expression.  
-It takes 4 arguments:  the URL for the image, the vertical alignment value, 
-the width, and the height of the image.  Any of the final three can be 
-blank in order to use the default.  
+Apart from the URL for the image, it takes three optional parameters:
+The vertical alignment value, the width, and the height of the image.
+Leave them out to get default values.
 
 With no vertical-align value, the image will sit on the baseline.  With 
 not width or height, the image will be its natural size.  With one of 
