@@ -53,12 +53,12 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
                 var opts = optarg.split(',');
                 for(var i=0,l=opts.length;i<l;++i){
                   var parts = opts[i].split('=');
-                  var key = parts[0].trim();
+                  var key = parts[0].replace(/^ +/,"").replace(/ +$/,"");
                   /* empty values are ok:
                   if(parts.length<2)
                     TEX.Error('Empty value for parameter "'+key+'"');
                   */
-                  if(!(key in def))
+                  if(!def.hasOwnProperty(key))
                     TEX.Error(['UnknownKey','Unknown parameter in %1',key]);
                   var val = parts.slice(1).join('=');
                   val = CheckDimen(val);
