@@ -43,4 +43,4 @@ in your configuration. See also the [documentation page on third party extension
 
 The MathJax documentation [contains a tutorial on extension writing](http://docs.mathjax.org/en/latest/extension-writing.html).
 
-Afterwards, you might want to start by looking at some of the extensions here and [the MathJax core extensions](http://github.com/mathjax/mathjax/unpacked/extensions).
+Afterwards, you might want to start by looking at some of the extensions here and [the MathJax core extensions](http://github.com/mathjax/MathJax/tree/master/unpacked/extensions).
