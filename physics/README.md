@@ -1,54 +1,41 @@
-HTML Header:	<script type="text/x-mathjax-config">
-		MathJax.Ajax.config.path["Contrib"] = "https://cdn.mathjax.org/mathjax/contrib";
-		MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
-			MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{
-				cancel: ["Extension","cancel"],
-				bcancel: ["Extension","cancel"],
-				xcancel: ["Extension","cancel"],
-				cancelto: ["Extension","cancel"]
-			});
-		});
-		MathJax.Hub.Config({
-			TeX: {
-				equationNumbers: { autoNumber: "AMS"},
-				extensions: ["[Contrib]/physics/physics.js"]
-			}
-		});
-	</script>
-	<script type="text/javascript"
-		src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-	</script>  
-LaTeX input:	mmd-article-header  
-LaTeX input:	kolen-header  
+---
+HTML Header:	<script type="text/x-mathjax-config">MathJax.Ajax.config.path.Contrib="https://cdn.mathjax.org/mathjax/contrib",MathJax.Hub.Register.StartupHook("TeX Jax Ready",function(){MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{cancel:["Extension","cancel"],bcancel:["Extension","cancel"],xcancel:["Extension","cancel"],cancelto:["Extension","cancel"]})}),MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["[Contrib]/physics/physics.js","[Contrib]/siunitx/siunitx.js"]}});</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full"></script>
+CSS:	https://ickc.github.io/multimarkdown-latex-css/combined-css/multimarkdown-latex.css
+HTML Header Level:	1
+LaTeX Header Level:	2
+LaTeX Input:	mmd-article-header
+LaTeX input:	mmd-natbib-plain
+LaTeX Input:	mmd-load-physics-related
+LaTeX Input:	mmd-load-tables-related
+LaTeX Input:	mmd-load-pdfpages
+LaTeX Input:	mmd-load-headings
+thmd:	chapter
+LaTeX Input:	mmd-load-amsthm
 Title:	LaTeX Physics Package in MathJax  
 Subtitle:	Mimicking Some of the Commands in LaTeX Physics Package
 Keywords:	Physics Package
-Revision:	0.9  
-Author:	Kolen Cheung  
-Email:	khcheung@berkeley.edu  
-Affiliation:	University of California, Berkeley  
-Copyright:	2015 Kolen Cheung  
-	All Rights Reserved.  
-Language:	English  
-Base Header Level:	2  
-LaTeX Mode:	memoir  
-LaTeX input:	mmd-article-begin-doc  
-LaTeX footer:	mmd-memoir-footer  
-
-<!--
-	\setcounter{tocdepth}{5}
-	\tableofcontents
-	\begin{comment}
--->
-**Table of Contents**
-
+Revision:	0.9
+Language:	English
+Author:	Kolen Cheung
+Email:	khcheung@berkeley.edu
+Affiliation:	University of California, Berkeley
+Copyright:	2016 Kolen Cheung  
+ 	All Rights Reserved.
+LaTeX Mode:	memoir
+LaTeX Input:	mmd-article-begin-doc
+tocd:	5
+secd:	5
+LaTeX Input:	mmd-load-toc-setcounter
+LaTeX Input:	mmd-load-toc
+LaTeX Footer:	mmd-memoir-footer
+---
+<!-- \begin{comment} -->
 {{TOC}}
-<!--\end{comment}-->
+<!-- \end{comment} -->
 
 # LaTeX Physics Package
 
-In LaTeX, when you `\usepackage{physics}`, you used the [LaTeX Physics Package](http://www.ctan.org/pkg/physics).
-This extension is to mimick that in MathJax.
+This extension is to mimick [LaTeX Physics Package](http://www.ctan.org/pkg/physics) in MathJax.
 
 # Commands not Working/Included
 
@@ -58,13 +45,13 @@ This extension is to mimick that in MathJax.
 	- `[]` modified command
 	- variable no. of arguments
 	- Best example containing all of the above: `\dv`, from `\dv{}` to `\dv*[]{}{}`
-- Different names with the same commands are not implemented yet, but easy to be done.
+- Different names with the same commands are not implemented yet, but it is easy to be done.
 
 # MathJax Macro
 
 The extension is equivalent to the following macro:
 
-
+```html
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   TeX: {
@@ -133,7 +120,7 @@ mel: ["{\\langle{ #1 }\\vert{ #2 }\\vert{#3}\\rangle}",3]
   }
 });
 </script>
-
+```
 
 # Test
 
