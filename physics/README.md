@@ -1,3 +1,50 @@
+HTML Header:	<script type="text/x-mathjax-config">
+		MathJax.Ajax.config.path["Contrib"] = "https://cdn.mathjax.org/mathjax/contrib";
+		MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+			MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{
+				cancel: ["Extension","cancel"],
+				bcancel: ["Extension","cancel"],
+				xcancel: ["Extension","cancel"],
+				cancelto: ["Extension","cancel"]
+			});
+		});
+		MathJax.Hub.Config({
+			TeX: {
+				equationNumbers: { autoNumber: "AMS"},
+				extensions: ["[Contrib]/physics/physics.js"]
+			}
+		});
+	</script>
+	<script type="text/javascript"
+		src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>  
+LaTeX input:	mmd-article-header  
+LaTeX input:	kolen-header  
+Title:	LaTeX Physics Package in MathJax  
+Subtitle:	Mimicking Some of the Commands in LaTeX Physics Package
+Keywords:	Physics Package
+Revision:	0.9  
+Author:	Kolen Cheung  
+Email:	khcheung@berkeley.edu  
+Affiliation:	University of California, Berkeley  
+Copyright:	2015 Kolen Cheung  
+	All Rights Reserved.  
+Language:	English  
+Base Header Level:	2  
+LaTeX Mode:	memoir  
+LaTeX input:	mmd-article-begin-doc  
+LaTeX footer:	mmd-memoir-footer  
+
+<!--
+	\setcounter{tocdepth}{5}
+	\tableofcontents
+	\begin{comment}
+-->
+**Table of Contents**
+
+{{TOC}}
+<!--\end{comment}-->
+
 # LaTeX Physics Package
 
 In LaTeX, when you `\usepackage{physics}`, you used the [LaTeX Physics Package](http://www.ctan.org/pkg/physics).
@@ -16,6 +63,7 @@ This extension is to mimick that in MathJax.
 # MathJax Macro
 
 The extension is equivalent to the following macro:
+
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -85,9 +133,7 @@ mel: ["{\\langle{ #1 }\\vert{ #2 }\\vert{#3}\\rangle}",3]
   }
 });
 </script>
-<script type="text/javascript"
-                    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
-                    </script>  
+
 
 # Test
 
