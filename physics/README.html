@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+<script type="text/x-mathjax-config">MathJax.Ajax.config.path.Contrib="https://cdn.mathjax.org/mathjax/contrib",MathJax.Hub.Register.StartupHook("TeX Jax Ready",function(){MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{cancel:["Extension","cancel"],bcancel:["Extension","cancel"],xcancel:["Extension","cancel"],cancelto:["Extension","cancel"]})}),MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["[Contrib]/physics/physics.js","[Contrib]/siunitx/siunitx.js"]}});</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full"></script>
+	<link type="text/css" rel="stylesheet" href="https://ickc.github.io/multimarkdown-latex-css/combined-css/multimarkdown-latex.css"/>
+	<meta name="latexheaderlevel" content="2"/>
+	<meta name="thmd" content="chapter"/>
+	<title>LaTeX Physics Package in MathJax</title>
+	<meta name="subtitle" content="Mimicking Some of the Commands in LaTeX Physics Package"/>
+	<meta name="keywords" content="Physics Package"/>
+	<meta name="revision" content="0.9"/>
+	<meta name="language" content="English"/>
+	<meta name="author" content="Kolen Cheung"/>
+	<meta name="email" content="khcheung@berkeley.edu"/>
+	<meta name="affiliation" content="University of California, Berkeley"/>
+	<meta name="copyright" content="2016 Kolen Cheung  
+All Rights Reserved."/>
+	<meta name="tocd" content="5"/>
+	<meta name="secd" content="5"/>
+</head>
+<body>
+
+<!-- \begin{comment} --><div class="TOC">
+
+
+<ul>
+<li><a href="#latexphysicspackage">LaTeX Physics Package</a></li>
+<li><a href="#commandsnotworkingincluded">Commands not Working/Included</a></li>
+<li><a href="#mathjaxmacro">MathJax Macro</a></li>
+<li><a href="#test">Test</a></li>
+</ul>
+</div>
+
+<!-- \end{comment} -->
+
+<h1 id="latexphysicspackage">LaTeX Physics Package</h1>
+
+<p>This extension is to mimick <a href="http://www.ctan.org/pkg/physics">LaTeX Physics Package</a> in MathJax.</p>
+
+<h1 id="commandsnotworkingincluded">Commands not Working/Included</h1>
+
+<ul>
+<li>Matrix Macros are not implemented yet</li>
+<li>Commands are not working whenever any one of these is true:
+
+<ul>
+<li><code>*</code> modified command</li>
+<li><code>[]</code> modified command</li>
+<li>variable no. of arguments</li>
+<li>Best example containing all of the above: <code>\dv</code>, from <code>\dv{}</code> to <code>\dv*[]{}{}</code></li>
+</ul></li>
+<li>Different names with the same commands are not implemented yet, but it is easy to be done.</li>
+</ul>
+
+<h1 id="mathjaxmacro">MathJax Macro</h1>
+
+<p>The extension is equivalent to the following macro:</p>
+
+<pre><code class="html">&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
+MathJax.Hub.Config({
+  TeX: {
+    Macros: {
+pqty: [&quot;{\( #1 \)}&quot;,1],
+bqty: [&quot;{\[ #1 \]}&quot;,1],
+Bqty: [&quot;{\\{ #1 \\}}&quot;,1],
+abs: [&quot;{\\vert #1 \\vert}&quot;,1],
+norm: [&quot;{\\vert\\vert #1 \\vert\\vert}&quot;,1],
+eval: [&quot;{#1 \\vert}&quot;,1],
+order: [&quot;{\\mathcal{O} \( #1 \)}&quot;,1],
+comm: [&quot;{\[ #1 , #2 \]}&quot;,2],
+acomm: [&quot;{\\{ #1 , #2 \\}}&quot;,2],
+vb: [&quot;{\\boldsymbol{ #1 }}&quot;,1],
+va: [&quot;{\\vec{\\boldsymbol{ #1 }}}&quot;,1],
+vu: [&quot;{{\\boldsymbol{\\hat{ #1 }}}}&quot;,1],
+vdot: [&quot;{\\boldsymbol\\cdot}&quot;],
+cross: [&quot;{\\boldsymbol\\times}&quot;],
+grad: [&quot;{\\boldsymbol\\nabla}&quot;],
+div: [&quot;{\\grad\\vdot}&quot;],
+curl: [&quot;{\\grad\\cross}&quot;],
+laplacian: [&quot;{\\nabla^2}&quot;],
+tr: [&quot;{\\text{tr }}&quot;],
+Tr: [&quot;{\\text{Tr }}&quot;],
+rank: [&quot;{\\text{rank }}&quot;],
+erf: [&quot;{\\text{erf }}&quot;],
+Res: [&quot;{\\text{Res}}&quot;],
+pv: [&quot;{\\mathcal{P}}&quot;],
+PV: [&quot;{\\text{P.V.}}&quot;],
+Re: [&quot;{\\text{Re} \\{ #1 \\}}&quot;,1],
+Im: [&quot;{\\text{Im} \\{ #1 \\}}&quot;,1],
+qq: [&quot;{\\quad\\text{ #1 }\\quad}&quot;,1],
+qc: [&quot;{\\text{,}\\quad}&quot;],
+qcc: [&quot;{\\quad\\text{c.c.}\\quad}&quot;],
+qif: [&quot;{\\quad\\text{if}\\quad}&quot;],
+qthen: [&quot;{\\quad\\text{then}\\quad}&quot;],
+qelse: [&quot;{\\quad\\text{else}\\quad}&quot;],
+qotherwise: [&quot;{\\quad\\text{otherwise}\\quad}&quot;],
+qunless: [&quot;{\\quad\\text{unless}\\quad}&quot;],
+qgiven: [&quot;{\\quad\\text{given}\\quad}&quot;],
+qusing: [&quot;{\\quad\\text{using}\\quad}&quot;],
+qassume: [&quot;{\\quad\\text{assume}\\quad}&quot;],
+qsince: [&quot;{\\quad\\text{since}\\quad}&quot;],
+qlet: [&quot;{\\quad\\text{let}\\quad}&quot;],
+qfor: [&quot;{\\quad\\text{for}\\quad}&quot;],
+qall: [&quot;{\\quad\\text{all}\\quad}&quot;],
+qeven: [&quot;{\\quad\\text{even}\\quad}&quot;],
+qodd: [&quot;{\\quad\\text{odd}\\quad}&quot;],
+qinteger: [&quot;{\\quad\\text{integer}\\quad}&quot;],
+qand: [&quot;{\\quad\\text{and}\\quad}&quot;],
+qor: [&quot;{\\quad\\text{or}\\quad}&quot;],
+qas: [&quot;{\\quad\\text{as}\\quad}&quot;],
+qin: [&quot;{\\quad\\text{in}\\quad}&quot;],
+dd: [&quot;{\\text{d}}&quot;],
+dv: [&quot;{\\frac{\\text{d}{ #1 }}{\\text{d}{ #2 }}}&quot;,2],
+pdv: [&quot;{\\frac{\\partial{ #1 }}{\\partial{ #2 }}}&quot;,2],
+var: [&quot;{\\delta}&quot;],
+fdv: [&quot;{\\frac{\\delta{ #1 }}{\\delta{ #2 }}}&quot;,2],
+ket: [&quot;{\\vert { #1 } \\rangle}&quot;,1],
+bra: [&quot;{\\langle { #1} \\vert}&quot;,1],
+braket: [&quot;{\\langle {#1} \\vert { #2} \\rangle}&quot;,2],
+ketbra: [&quot;{\\vert { #1 } \\rangle\\langle { #2} \\vert}&quot;,2],
+ev: [&quot;{\\langle {#1 } \\rangle}&quot;,1],
+mel: [&quot;{\\langle{ #1 }\\vert{ #2 }\\vert{#3}\\rangle}&quot;,3]
+    }
+  }
+});
+&lt;/script&gt;
+</code></pre>
+
+<h1 id="test">Test</h1>
+
+<p>You can use the following table to test which commands in the Physics packages are available and working. Note, some of the commands are not working yet.</p>
+
+<table>
+<colgroup>
+<col/>
+<col/>
+</colgroup>
+
+<thead>
+<tr>
+	<th>Automatic Bracing</th>
+	<th>Code</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td><span class="math">\(\pqty{a}\)</span></td>
+	<td><code>\pqty{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\bqty{a}\)</span></td>
+	<td><code>\bqty{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\Bqty{a}\)</span></td>
+	<td><code>\Bqty{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\abs{a}\)</span></td>
+	<td><code>\abs{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\norm{a}\)</span></td>
+	<td><code>\norm{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\eval{a}_1^2\)</span></td>
+	<td><code>\eval{}_1^2</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\order{x}\)</span></td>
+	<td><code>\order{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\comm{A}{B}\)</span></td>
+	<td><code>\comm{A}{B}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\acomm{A}{B}\)</span></td>
+	<td><code>\acomm{A}{B}</code></td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<colgroup>
+<col/>
+<col/>
+</colgroup>
+
+<thead>
+<tr>
+	<th>Vector Notation</th>
+	<th>Code</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td><span class="math">\(\vb{a}\)</span></td>
+	<td><code>\vb{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\vb{\psi}\)</span></td>
+	<td><code>\vb{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\vb*{a}\)</span></td>
+	<td><code>\vb*{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\vb*{\psi}\)</span></td>
+	<td><code>\vb*{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\va{a}\)</span></td>
+	<td><code>\va{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\va{\psi}\)</span></td>
+	<td><code>\va{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\va*{a}\)</span></td>
+	<td><code>\va*{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\va*{\psi}\)</span></td>
+	<td><code>\va*{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\vu{a}\)</span></td>
+	<td><code>\vu{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\vu{\psi}\)</span></td>
+	<td><code>\vu{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\vu*{a}\)</span></td>
+	<td><code>\vu*{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\vu*{\psi}\)</span></td>
+	<td><code>\vu*{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\vdot\)</span></td>
+	<td><code>\vdot</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\cross\)</span></td>
+	<td><code>\cross</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\grad(\psi)\)</span></td>
+	<td><code>\grad()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\grad[\psi]\)</span></td>
+	<td><code>\grad[]</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\grad{\psi}\)</span></td>
+	<td><code>\grad{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\div(\psi)\)</span></td>
+	<td><code>\div()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\div[\psi]\)</span></td>
+	<td><code>\div[]</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\div{\psi}\)</span></td>
+	<td><code>\div{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\curl(\psi)\)</span></td>
+	<td><code>\curl()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\curl[\psi]\)</span></td>
+	<td><code>\curl[]</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\curl{\psi}\)</span></td>
+	<td><code>\curl{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\laplacian(\psi)\)</span></td>
+	<td><code>\laplacian()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\laplacian[\psi]\)</span></td>
+	<td><code>\laplacian[]</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\laplacian{\psi}\)</span></td>
+	<td><code>\laplacian{}</code></td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<colgroup>
+<col/>
+<col/>
+</colgroup>
+
+<thead>
+<tr>
+	<th>Operators</th>
+	<th>Code</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td><span class="math">\(\sin x\)</span></td>
+	<td><code>\sin</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\sin(x)\)</span></td>
+	<td><code>\sin()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\sin[2](x)\)</span></td>
+	<td><code>\sin[2]()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\tr\rho\)</span></td>
+	<td><code>\tr</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\Tr\rho\)</span></td>
+	<td><code>\Tr</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\rank M\)</span></td>
+	<td><code>\rank</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\erf(x)\)</span></td>
+	<td><code>\erf()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\Res[f(z)]\)</span></td>
+	<td><code>\Res[]</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\pv{\int f(z) \dd{z}}\)</span></td>
+	<td><code>\pv{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\PV{\int f(z) \dd{z}}\)</span></td>
+	<td><code>\PV{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\Re{z}\)</span></td>
+	<td><code>\Re{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\Im{z}\)</span></td>
+	<td><code>\Im{}</code></td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<colgroup>
+<col/>
+<col/>
+</colgroup>
+
+<thead>
+<tr>
+	<th>Quick Quad Text</th>
+	<th>Code</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td><span class="math">\(\qq{some texts}\)</span></td>
+	<td><code>\qq{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qq*{some texts}\)</span></td>
+	<td><code>\qq*{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qc\)</span></td>
+	<td><code>\qc</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qcc\)</span></td>
+	<td><code>\qcc</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qif\)</span></td>
+	<td><code>\qif</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qthen\)</span></td>
+	<td><code>\qthen</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qelse\)</span></td>
+	<td><code>\qelse</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qotherwise\)</span></td>
+	<td><code>\qotherwise</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qunless\)</span></td>
+	<td><code>\qunless</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qgiven\)</span></td>
+	<td><code>\qgiven</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qusing\)</span></td>
+	<td><code>\qusing</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qassume\)</span></td>
+	<td><code>\qassume</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qsince\)</span></td>
+	<td><code>\qsince</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qlet\)</span></td>
+	<td><code>\qlet</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qfor\)</span></td>
+	<td><code>\qfor</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qall\)</span></td>
+	<td><code>\qall</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qeven\)</span></td>
+	<td><code>\qeven</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qodd\)</span></td>
+	<td><code>\qodd</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qinteger\)</span></td>
+	<td><code>\qinteger</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qand\)</span></td>
+	<td><code>\qand</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qor\)</span></td>
+	<td><code>\qor</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qas\)</span></td>
+	<td><code>\qas</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\qin\)</span></td>
+	<td><code>\qin</code></td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<colgroup>
+<col/>
+<col/>
+</colgroup>
+
+<thead>
+<tr>
+	<th>Derivatives</th>
+	<th>Code</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td><span class="math">\(\dd{x}\)</span></td>
+	<td><code>\dd{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\dd[3]{x}\)</span></td>
+	<td><code>\dd[3]{x}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\dd(\cos\theta)\)</span></td>
+	<td><code>\dd()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\dv{x}\)</span></td>
+	<td><code>\dv{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\dv{f}{x}\)</span></td>
+	<td><code>\dv{}{x}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\dv[n]{f}{x}\)</span></td>
+	<td><code>\dv[]{f}{x}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\dv{x}(x^2+x^3)\)</span></td>
+	<td><code>\dv{x}()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\dv*{f}{x}\)</span></td>
+	<td><code>\dv*{}{x}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\pdv{x}\)</span></td>
+	<td><code>\pdv{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\pdv{f}{x}\)</span></td>
+	<td><code>\pdv{}{x}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\pdv[n]{f}{x}\)</span></td>
+	<td><code>\pdv[]{f}{x}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\pdv{x}(x^2+x^3)\)</span></td>
+	<td><code>\pdv{x}()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\pdv{f}{x}{y}\)</span></td>
+	<td><code>\pdv{}{x}{y}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\var{F[g(x)]}\)</span></td>
+	<td><code>\var{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\var(E-TS)\)</span></td>
+	<td><code>\var()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\fdv{g}\)</span></td>
+	<td><code>\fdv{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\fdv{F}{g}\)</span></td>
+	<td><code>\fdv{}{g}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\fdv{V}(E-TS)\)</span></td>
+	<td><code>\fdv{V}()</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\fdv*{F}{x}\)</span></td>
+	<td><code>\fdv*{}{x}</code></td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<colgroup>
+<col/>
+<col/>
+</colgroup>
+
+<thead>
+<tr>
+	<th>Dirac Bracket Notation</th>
+	<th>Code</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td><span class="math">\(\ket{\psi}\)</span></td>
+	<td><code>\ket{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\ket*{\psi}\)</span></td>
+	<td><code>\ket*{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\bra{\psi}\)</span></td>
+	<td><code>\bra{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\bra*{\psi}\)</span></td>
+	<td><code>\bra*{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\braket{a}{b}\)</span></td>
+	<td><code>\braket{a}{b}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\braket*{a}{b}\)</span></td>
+	<td><code>\braket*{a}{b}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\braket{\psi}\)</span></td>
+	<td><code>\braket{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\ketbra{a}{b}\)</span></td>
+	<td><code>\ketbra{a}{b}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\ketbra*{a}{b}\)</span></td>
+	<td><code>\ketbra*{a}{b}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\ketbra{\psi}\)</span></td>
+	<td><code>\ketbra{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\ev{\psi}\)</span></td>
+	<td><code>\ev{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\ev{A}{\psi}\)</span></td>
+	<td><code>\ev{}{\psi}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\ev*{\psi}\)</span></td>
+	<td><code>\ev*{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\ev**{\psi}\)</span></td>
+	<td><code>\ev**{}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\mel{m}{A}{n}\)</span></td>
+	<td><code>\mel{m}{}{n}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\mel*{m}{A}{n}\)</span></td>
+	<td><code>\mel*{m}{}{n}</code></td>
+</tr>
+<tr>
+	<td><span class="math">\(\mel**{m}{A}{n}\)</span></td>
+	<td><code>\mel**{m}{}{n}</code></td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>
