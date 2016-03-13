@@ -56,11 +56,13 @@ As I mentioned, everything done so far is by string substitution only. If you kn
 
 # Organization #
 
-`physics.xlsx` is the master file[^ If you are laughing right now, you should really consider contributing. See [Commands not Working/Included][].].
+`physics.xlsx` is the master file[^ If you are laughing right now, you should really consider contributing. See [Commands not Working and Helps Needed][].].
 
 - Columns A-L are copied to [test/tables.md](test/tables.md)
 - Columns M-V are copied to [unpacked/physics.js](unpacked/physics.js)
 - Columns M-V excluding column O are copied to [test/macro.js](test/macro.js)
+
+`License.js` is used to store the license that should be appended to the `.js` files.
 
 Other files are built automatically by `physics.sh`. [MultiMarkdown](http://fletcherpenney.net/multimarkdown/download/), UglifyJS2, LaTeX are assumed. I used it on Mac and have no idea if the way my bash script is written is OS agnostic or not.
 
