@@ -55,17 +55,17 @@ As I mentioned, everything done so far is by string substitution only. If you kn
 
 # Organization #
 
-`README.xlsx` is the master file[^ If you are laughing right now, you should really consider contributing. See [Commands not Working/Included][].].
+`physics.xlsx` is the master file[^ If you are laughing right now, you should really consider contributing. See [Commands not Working/Included][].].
 
 - Columns A-L are copied to [test/tables.md](test/tables.md)
 - Columns M-V are copied to [unpacked/physics.js](unpacked/physics.js)
 - Columns M-V excluding column O are copied to [test/macro.js](test/macro.js)
 
-Other files are built automatically by `README.sh`. [MultiMarkdown](http://fletcherpenney.net/multimarkdown/download/), UglifyJS2, LaTeX are assumed. I used it on Mac and have no idea if the way my bash script is written is OS agnostic or not.
+Other files are built automatically by `physics.sh`. [MultiMarkdown](http://fletcherpenney.net/multimarkdown/download/), UglifyJS2, LaTeX are assumed. I used it on Mac and have no idea if the way my bash script is written is OS agnostic or not.
 
 # Test
 
-A test is given in [README.html](README.html) and [README.pdf](README.pdf). Compare the LaTeX output and HTML output and you will see which one is working or not.
+A test is given in [index.html](index.html) and [index.pdf](index.pdf). Compare the LaTeX output and HTML output and you will see which one is working or not.
 
 Instead of extension, it can works as a macro too. See the test in [macro.html](test/macro.html).
 

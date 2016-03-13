@@ -19,8 +19,9 @@ mv temp.js physics.js
 
 mmd test/macro.md
 mmd README.md
+mv README.html index.html
 
 cp README.md temp.md
 mmd2pdf temp.md
-mv temp.pdf README.pdf
+mv temp.pdf index.pdf
 find . -iname 'temp.*' -exec mv '{}' ~/.Trash/ \;
