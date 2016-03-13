@@ -2,83 +2,135 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-<script type="text/x-mathjax-config">MathJax.Ajax.config.path.Contrib="https://cdn.mathjax.org/mathjax/contrib",MathJax.Hub.Register.StartupHook("TeX Jax Ready",function(){MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{cancel:["Extension","cancel"],bcancel:["Extension","cancel"],xcancel:["Extension","cancel"],cancelto:["Extension","cancel"]})}),MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["[Contrib]/physics/physics.js","[Contrib]/siunitx/siunitx.js"]}});</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full"></script>
-	<link type="text/css" rel="stylesheet" href="https://ickc.github.io/multimarkdown-latex-css/combined-css/multimarkdown-latex.css"/>
-	<meta name="latexheaderlevel" content="2"/>
-	<meta name="thmd" content="chapter"/>
-	<title>LaTeX Physics Package in MathJax</title>
-	<meta name="subtitle" content="Mimicking Some of the Commands in LaTeX Physics Package"/>
-	<meta name="keywords" content="Physics Package"/>
-	<meta name="revision" content="0.10"/>
-	<meta name="language" content="English"/>
-	<meta name="author" content="Kolen Cheung"/>
-	<meta name="email" content="khcheung@berkeley.edu"/>
-	<meta name="affiliation" content="University of California, Berkeley"/>
-	<meta name="copyright" content="2015-2016 Kolen Cheung  
-All Rights Reserved."/>
-	<meta name="tocd" content="5"/>
-	<meta name="secd" content="5"/>
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full">
+</script>
 </head>
 <body>
 
-<!-- \begin{comment} --><div class="TOC">
-
-
-<ul>
-<li><a href="#latexphysicspackage">LaTeX Physics Package</a></li>
-<li><a href="#commandsnotworkingandhelpsneeded">Commands not Working and Helps Needed</a></li>
-<li><a href="#organization">Organization</a></li>
-<li><a href="#test">Test</a></li>
-</ul>
-</div>
-
-<!-- \end{comment} -->
-
-<h1 id="latexphysicspackage">LaTeX Physics Package</h1>
-
-<p>This extension is to mimics <a href="http://www.ctan.org/pkg/physics">LaTeX Physics Package</a> in MathJax.</p>
-
-<h1 id="commandsnotworkingandhelpsneeded">Commands not Working and Helps Needed</h1>
-
-<p>The following commands in the Physics Package is not implemented yet:</p>
-
-<ul>
-<li>All Matrix Macros</li>
-<li>So far everything done here is by string substitution. Whenever commands involving the following cannot be done simply by string substitution and hence not working:
-
-<ol>
-<li><code>*</code> modified command</li>
-<li><code>[]</code> modified command</li>
-<li>variable no. of arguments</li>
-<li><code>()</code>, <code>[]</code> are used instead of <code>{}</code></li>
-</ol></li>
-<li>Examples of commands that doesn&#8217;t work:
-
-<ul>
-<li><code>\dv</code>: has properties 1&#8211;3</li>
-<li><code>\qty</code>: has property 4</li>
-</ul></li>
-</ul>
-
-<p>As I mentioned, everything done so far is by string substitution only. If you know more about Javascript and MathJax, and want to use the <a href="http://www.ctan.org/pkg/physics">LaTeX Physics Package</a> in MathJax, please consider contributing. Some hints are given in <a href="https://github.com/mathjax/MathJax-third-party-extensions/pull/16">Pull Request#16&#8212;MathJax-third-party-extensions</a> but I am too stupid to understand how the above cases should be handled.</p>
-
-<h1 id="organization">Organization</h1>
-
-<p><code>README.xlsx</code> is the master file<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a>.</p>
-
-<ul>
-<li>Columns A-L are copied to <a href="test/tables.md">test/tables.md</a></li>
-<li>Columns M-V are copied to <a href="unpacked/physics.js">unpacked/physics.js</a></li>
-<li>Columns M-V excluding column O are copied to <a href="test/macro.js">test/macro.js</a></li>
-</ul>
-
-<p>Other files are built automatically by <code>README.sh</code>. <a href="http://fletcherpenney.net/multimarkdown/download/">MultiMarkdown</a>, UglifyJS2, LaTeX are assumed. I used it on Mac and have no idea if the way my bash script is written is OS agnostic or not.</p>
-
-<h1 id="test">Test</h1>
-
-<p>A test is given in <a href="README.html">README.html</a> and <a href="README.pdf">README.pdf</a>. Compare the LaTeX output and HTML output and you will see which one is working or not.</p>
-
-<p>Instead of extension, it can works as a macro too. See the test in <a href="test/macro.html">macro.html</a>.</p>
+<script type="text/x-mathjax-config">
+/****************************************************
+ *
+ *  physics.js
+ *  
+ *  Implements the Physics Package for LaTeX input.
+ *  
+ *  ---------------------------------------------------------------------
+ *  
+ *  Copyright (c) 2015-2016 Kolen Cheung <https://github.com/ickc>.
+ * 
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */MathJax.Hub.Config({
+    TeX: {
+        Macros: {
+            quantity: [ "{  \\{ #1 \\}  }", 1 ],
+            qty: [ "{   \\{ #1 \\}  }", 1 ],
+            pqty: [ "{  ( #1 )  }", 1 ],
+            bqty: [ "{  [ #1 ]  }", 1 ],
+            vqty: [ "{  \\vert #1 \\vert    }", 1 ],
+            Bqty: [ "{  \\{ #1 \\}  }", 1 ],
+            absolutevalue: [ "{ \\vert #1 \\vert    }", 1 ],
+            abs: [ "{   \\vert #1 \\vert    }", 1 ],
+            norm: [ "{  \\vert\\vert #1 \\vert\\vert    }", 1 ],
+            evaluated: [ "{ #1 \\vert   }", 1 ],
+            eval: [ "{  #1 \\vert   }", 1 ],
+            order: [ "{ \\mathcal{O} ( #1 ) }", 1 ],
+            commutator: [ "{    [ #1 , #2 ] }", 2 ],
+            comm: [ "{  [ #1 , #2 ] }", 2 ],
+            anticommutator: [ "{    \\{ #1 , #2 \\} }", 2 ],
+            acomm: [ "{ \\{ #1 , #2 \\} }", 2 ],
+            poissonbracket: [ "{    \\{ #1 , #2 \\} }", 2 ],
+            pb: [ "{    \\{ #1 , #2 \\} }", 2 ],
+            vectorbold: [ "{    \\boldsymbol{ #1 }  }", 1 ],
+            vb: [ "{    \\boldsymbol{ #1 }  }", 1 ],
+            vectorarrow: [ "{   \\vec{\\boldsymbol{ #1 }}   }", 1 ],
+            va: [ "{    \\vec{\\boldsymbol{ #1 }}   }", 1 ],
+            vectorunit: [ "{    {\\boldsymbol{\\hat{ #1 }}} }", 1 ],
+            vu: [ "{    {\\boldsymbol{\\hat{ #1 }}} }", 1 ],
+            dotproduct: [ "{    \\boldsymbol\\cdot  }" ],
+            vdot: [ "{  \\boldsymbol\\cdot  }" ],
+            crossproduct: [ "{  \\boldsymbol\\times }" ],
+            cross: [ "{ \\boldsymbol\\times }" ],
+            cp: [ "{    \\boldsymbol\\times }" ],
+            gradient: [ "{  \\boldsymbol\\nabla }" ],
+            grad: [ "{  \\boldsymbol\\nabla }" ],
+            divergence: [ "{    \\grad\\vdot    }" ],
+            div: [ "{   \\grad\\vdot    }" ],
+            curl: [ "{  \\grad\\cross   }" ],
+            laplacian: [ "{ \\nabla^2   }" ],
+            tr: [ "{    \\text{tr } }" ],
+            Tr: [ "{    \\text{Tr } }" ],
+            rank: [ "{  \\text{rank }   }" ],
+            erf: [ "{   \\text{erf }    }" ],
+            Res: [ "{   \\text{Res} }" ],
+            principalvalue: [ "{    \\mathcal{P}    }" ],
+            pv: [ "{    \\mathcal{P}    }" ],
+            PV: [ "{    \\text{P.V.}    }" ],
+            Re: [ "{    \\text{Re} \\{ #1 \\}   }", 1 ],
+            Im: [ "{    \\text{Im} \\{ #1 \\}   }", 1 ],
+            qqtext: [ "{    \\quad\\text{ #1 }\\quad    }", 1 ],
+            qq: [ "{    \\quad\\text{ #1 }\\quad    }", 1 ],
+            qcomma: [ "{    \\text{,}\\quad }" ],
+            qc: [ "{    \\text{,}\\quad }" ],
+            qcc: [ "{   \\quad\\text{c.c.}\\quad    }" ],
+            qif: [ "{   \\quad\\text{if}\\quad  }" ],
+            qthen: [ "{ \\quad\\text{then}\\quad    }" ],
+            qelse: [ "{ \\quad\\text{else}\\quad    }" ],
+            qotherwise: [ "{    \\quad\\text{otherwise}\\quad   }" ],
+            qunless: [ "{   \\quad\\text{unless}\\quad  }" ],
+            qgiven: [ "{    \\quad\\text{given}\\quad   }" ],
+            qusing: [ "{    \\quad\\text{using}\\quad   }" ],
+            qassume: [ "{   \\quad\\text{assume}\\quad  }" ],
+            qsince: [ "{    \\quad\\text{since}\\quad   }" ],
+            qlet: [ "{  \\quad\\text{let}\\quad }" ],
+            qfor: [ "{  \\quad\\text{for}\\quad }" ],
+            qall: [ "{  \\quad\\text{all}\\quad }" ],
+            qeven: [ "{ \\quad\\text{even}\\quad    }" ],
+            qodd: [ "{  \\quad\\text{odd}\\quad }" ],
+            qinteger: [ "{  \\quad\\text{integer}\\quad }" ],
+            qand: [ "{  \\quad\\text{and}\\quad }" ],
+            qor: [ "{   \\quad\\text{or}\\quad  }" ],
+            qas: [ "{   \\quad\\text{as}\\quad  }" ],
+            qin: [ "{   \\quad\\text{in}\\quad  }" ],
+            differential: [ "{  \\text{d}   }" ],
+            dd: [ "{    \\text{d}   }" ],
+            derivative: [ "{    \\frac{\\text{d}{ #1 }}{\\text{d}{ #2 }}    }", 2 ],
+            dv: [ "{    \\frac{\\text{d}{ #1 }}{\\text{d}{ #2 }}    }", 2 ],
+            partialderivative: [ "{ \\frac{\\partial{ #1 }}{\\partial{ #2 }}    }", 2 ],
+            pdv: [ "{   \\frac{\\partial{ #1 }}{\\partial{ #2 }}    }", 2 ],
+            variation: [ "{ \\delta }" ],
+            "var": [ "{ \\delta }" ],
+            functionalderivative: [ "{  \\frac{\\delta{ #1 }}{\\delta{ #2 }}    }", 2 ],
+            fdv: [ "{   \\frac{\\delta{ #1 }}{\\delta{ #2 }}    }", 2 ],
+            ket: [ "{   \\vert { #1 } \\rangle  }", 1 ],
+            bra: [ "{   \\langle { #1} \\vert   }", 1 ],
+            innerproduct: [ "{  \\langle {#1} \\vert { #2} \\rangle }", 2 ],
+            braket: [ "{    \\langle {#1} \\vert { #2} \\rangle }", 2 ],
+            outerproduct: [ "{  \\vert { #1 } \\rangle\\langle { #2} \\vert }", 2 ],
+            dyad: [ "{  \\vert { #1 } \\rangle\\langle { #2} \\vert }", 2 ],
+            ketbra: [ "{    \\vert { #1 } \\rangle\\langle { #2} \\vert }", 2 ],
+            op: [ "{    \\vert { #1 } \\rangle\\langle { #2} \\vert }", 2 ],
+            expectationvalue: [ "{  \\langle {#1 } \\rangle }", 1 ],
+            expval: [ "{    \\langle {#1 } \\rangle }", 1 ],
+            ev: [ "{    \\langle {#1 } \\rangle }", 1 ],
+            matrixelement: [ "{ \\langle{ #1 }\\vert{ #2 }\\vert{#3}\\rangle    }", 3 ],
+            matrixel: [ "{  \\langle{ #1 }\\vert{ #2 }\\vert{#3}\\rangle    }", 3 ],
+            mel: [ "{   \\langle{ #1 }\\vert{ #2 }\\vert{#3}\\rangle    }", 3 ]
+        }
+    }
+});
+</script>
 
 <table>
 <colgroup>
@@ -737,17 +789,6 @@ All Rights Reserved."/>
 </tr>
 </tbody>
 </table>
-
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn:1">
-<p>If you are laughing right now, you should really consider contributing. See [Commands not Working/Included][]. <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
-</li>
-
-</ol>
-</div>
-
 
 </body>
 </html>
