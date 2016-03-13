@@ -65,8 +65,8 @@ Other files are built automatically by `physics.sh`. [MultiMarkdown](http://flet
 
 # Test
 
-A test is given in [index.html](index.html)[^ This relies on the CDN of MathJax. i.e. there might be a delay. To see instantaneous test, use [macro.html](test/macro.html).] and [index.pdf](index.pdf). Compare the LaTeX output and HTML output and you will see which one is working or not.
+A test is given in [index.html](https://ickc.github.io/MathJax-third-party-extensions/physics/)[^ This relies on the CDN of MathJax. i.e. there will be a delay. To see instantaneous test, use [macro.html](https://ickc.github.io/MathJax-third-party-extensions/physics/test/macro.html).] and [index.pdf](https://ickc.github.io/MathJax-third-party-extensions/physics/index.pdf). Compare the LaTeX output and HTML output and you will see which one is working or not.
 
-Instead of extension, it can works as a macro too. See the test in [macro.html](test/macro.html).
+Instead of extension, it can works as a macro too. See the test in [macro.html](https://ickc.github.io/MathJax-third-party-extensions/physics/test/macro.html).
 
 {{test/tables.md}}
