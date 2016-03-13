@@ -49,16 +49,10 @@ All Rights Reserved."/>
 
 <ol>
 <li><code>*</code> modified command</li>
-<li><code>[]</code> modified command</li>
+<li><code>[]</code> (or <code>()</code>) is involved</li>
 <li>variable no. of arguments</li>
-<li><code>()</code>, <code>[]</code> are used instead of <code>{}</code></li>
 </ol></li>
-<li>Examples of commands that doesn&#8217;t work:
-
-<ul>
-<li><code>\dv</code>: has properties 1&#8211;3</li>
-<li><code>\qty</code>: has property 4</li>
-</ul></li>
+<li>Examples of commands that doesn&#8217;t work: <code>\dv</code>: has all the properties mentioned above</li>
 </ul>
 
 <p>As I mentioned, everything done so far is by string substitution only. If you know more about Javascript and MathJax, and want to use the <a href="http://www.ctan.org/pkg/physics">LaTeX Physics Package</a> in MathJax, please consider contributing. Some hints are given in <a href="https://github.com/mathjax/MathJax-third-party-extensions/pull/16">Pull Request#16&#8212;MathJax-third-party-extensions</a> but I am too stupid to understand how the above cases should be handled.</p>
