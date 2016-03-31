@@ -14,6 +14,7 @@ mv temp.js unpacked/physics.js
 uglifyjs unpacked/physics.js -m -c -o physics.js
 cat License.js physics.js > temp.js
 mv temp.js physics.js
+sed -i '' s/"unpacked\/"// physics.js
 
 # MultiMarkdown
 
