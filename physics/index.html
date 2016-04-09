@@ -3,14 +3,14 @@
 <head>
 	<meta charset="utf-8"/>
 <script type="text/x-mathjax-config">MathJax.Ajax.config.path.Contrib="https://cdn.mathjax.org/mathjax/contrib",MathJax.Hub.Register.StartupHook("TeX Jax Ready",function(){MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{cancel:["Extension","cancel"],bcancel:["Extension","cancel"],xcancel:["Extension","cancel"],cancelto:["Extension","cancel"]})}),MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["[Contrib]/physics/physics.js","[Contrib]/siunitx/siunitx.js"]}});</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full"></script>
-	<link type="text/css" rel="stylesheet" href="https://ickc.github.io/multimarkdown-latex-css/combined-css/multimarkdown-latex.css"/>
-	<link type="text/css" rel="stylesheet" href="https://ickc.github.io/multimarkdown-setup/css/github 2.css"/>
+	<link type="text/css" rel="stylesheet" href="https://ickc.github.io/multimarkdown-latex-css/css/multimarkdown-latex-lmodern.css"/>
+	<link type="text/css" rel="stylesheet" href="https://ickc.github.io/multimarkdown-latex-css/fonts/fonts.css"/>
 	<meta name="latexheaderlevel" content="2"/>
 	<meta name="thmd" content="chapter"/>
 	<title>LaTeX Physics Package in MathJax</title>
 	<meta name="subtitle" content="Mimicking Some of the Commands in LaTeX Physics Package"/>
 	<meta name="keywords" content="Physics Package"/>
-	<meta name="revision" content="0.10"/>
+	<meta name="revision" content="0.11"/>
 	<meta name="language" content="English"/>
 	<meta name="author" content="Kolen Cheung"/>
 	<meta name="email" content="khcheung@berkeley.edu"/>
@@ -27,7 +27,7 @@ All Rights Reserved."/>
 
 <ul>
 <li><a href="#latexphysicspackage">LaTeX Physics Package</a></li>
-<li><a href="#commandsnotworkingandhelpsneeded">Commands not Working and Helps Needed</a></li>
+<li><a href="#somecommandsarenotworking">Some Commands are not Working</a></li>
 <li><a href="#organization">Organization</a></li>
 <li><a href="#test">Test</a></li>
 </ul>
@@ -39,7 +39,7 @@ All Rights Reserved."/>
 
 <p>This extension is to mimics <a href="http://www.ctan.org/pkg/physics">LaTeX Physics Package</a> in MathJax.</p>
 
-<h1 id="commandsnotworkingandhelpsneeded">Commands not Working and Helps Needed</h1>
+<h1 id="somecommandsarenotworking">Some Commands are not Working</h1>
 
 <p>The following commands in the Physics Package is not implemented yet:</p>
 
@@ -55,11 +55,11 @@ All Rights Reserved."/>
 <li>Examples of commands that doesn&#8217;t work: <code>\dv</code>: has all the properties mentioned above</li>
 </ul>
 
-<p>As I mentioned, everything done so far is by string substitution only. If you know more about Javascript and MathJax, and want to use the <a href="http://www.ctan.org/pkg/physics">LaTeX Physics Package</a> in MathJax, please consider contributing. Some hints are given in <a href="https://github.com/mathjax/MathJax-third-party-extensions/pull/16">Pull Request#16&#8212;MathJax-third-party-extensions</a> but I am too stupid to understand how the above cases should be handled.</p>
+<p>As I mentioned, everything done so far is by string substitution only. Some hints are given in <a href="https://github.com/mathjax/MathJax-third-party-extensions/pull/16">Pull Request#16&#8212;MathJax-third-party-extensions</a> but I am too stupid to understand how the above cases should be handled. Feel free to improve it though.</p>
 
 <h1 id="organization">Organization</h1>
 
-<p><code>physics.xlsx</code> is the master file<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a>.</p>
+<p><code>physics.xlsx</code> is the master file.</p>
 
 <ul>
 <li>Columns A-L are copied to <a href="test/tables.md">test/tables.md</a></li>
@@ -73,7 +73,7 @@ All Rights Reserved."/>
 
 <h1 id="test">Test</h1>
 
-<p>A test is given in <a href="https://ickc.github.io/MathJax-third-party-extensions/physics/">index.html</a><a href="#fn:2" id="fnref:2" title="see footnote" class="footnote">[2]</a> and <a href="https://ickc.github.io/MathJax-third-party-extensions/physics/index.pdf">index.pdf</a>. Compare the LaTeX output and HTML output and you will see which one is working or not.</p>
+<p>A test is given in <a href="https://ickc.github.io/MathJax-third-party-extensions/physics/">index.html</a><a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a> and <a href="https://ickc.github.io/MathJax-third-party-extensions/physics/index.pdf">index.pdf</a>. Compare the LaTeX output and HTML output and you will see which one is working or not.</p>
 
 <p>Instead of extension, it can works as a macro too. See the test in <a href="https://ickc.github.io/MathJax-third-party-extensions/physics/test/macro.html">macro.html</a>.</p>
 
@@ -92,51 +92,51 @@ All Rights Reserved."/>
 
 <tbody>
 <tr>
-	<td><span class="math">\( \quantity{  a   }   \)</span></td>
+	<td><span class="math">\( \quantity{  \frac{1}{1+\frac{1}{2}} }   \)</span></td>
 	<td><code>\quantity{  }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \qty{   a   }   \)</span></td>
+	<td><span class="math">\( \qty{   \frac{1}{1+\frac{1}{2}} }   \)</span></td>
 	<td><code>\qty{   }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \pqty{  a   }   \)</span></td>
+	<td><span class="math">\( \pqty{  \frac{1}{1+\frac{1}{2}} }   \)</span></td>
 	<td><code>\pqty{  }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \bqty{  a   }   \)</span></td>
+	<td><span class="math">\( \bqty{  \frac{1}{1+\frac{1}{2}} }   \)</span></td>
 	<td><code>\bqty{  }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \vqty{  a   }   \)</span></td>
+	<td><span class="math">\( \vqty{  \frac{1}{1+\frac{1}{2}} }   \)</span></td>
 	<td><code>\vqty{  }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \Bqty{  a   }   \)</span></td>
+	<td><span class="math">\( \Bqty{  \frac{1}{1+\frac{1}{2}} }   \)</span></td>
 	<td><code>\Bqty{  }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \absolutevalue{ a   }   \)</span></td>
+	<td><span class="math">\( \absolutevalue{ \frac{1}{1+\frac{1}{2}} }   \)</span></td>
 	<td><code>\absolutevalue{ }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \abs{   a   }   \)</span></td>
+	<td><span class="math">\( \abs{   \frac{1}{1+\frac{1}{2}} }   \)</span></td>
 	<td><code>\abs{   }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \norm{  a   }   \)</span></td>
+	<td><span class="math">\( \norm{  \frac{1}{1+\frac{1}{2}} }   \)</span></td>
 	<td><code>\norm{  }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \evaluated{ a   }_1^2   \)</span></td>
+	<td><span class="math">\( \evaluated{ \frac{1}{1+\frac{1}{2}} }_1^2   \)</span></td>
 	<td><code>\evaluated{ }_1^2</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \eval{  a   }_1^2   \)</span></td>
+	<td><span class="math">\( \eval{  \frac{1}{1+\frac{1}{2}} }_1^2   \)</span></td>
 	<td><code>\eval{  }_1^2</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \order{ x   }   \)</span></td>
+	<td><span class="math">\( \order{ \frac{x}{2} }   \)</span></td>
 	<td><code>\order{ }</code></td>
 </tr>
 <tr>
@@ -378,11 +378,11 @@ All Rights Reserved."/>
 	<td><code>\PV{    }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \Re{    z   }   \)</span></td>
+	<td><span class="math">\( \Re{    \frac{1}{1+\frac{i}{2}} }   \)</span></td>
 	<td><code>\Re{    }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \Im{    z   }   \)</span></td>
+	<td><span class="math">\( \Im{    \frac{1}{1+\frac{i}{2}} }   \)</span></td>
 	<td><code>\Im{    }</code></td>
 </tr>
 </tbody>
@@ -633,103 +633,103 @@ All Rights Reserved."/>
 
 <tbody>
 <tr>
-	<td><span class="math">\( \ket{   \psi    }   \)</span></td>
+	<td><span class="math">\( \ket{   \frac{\psi + \phi}{2}   }   \)</span></td>
 	<td><code>\ket{   }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \ket*{  \psi    }   \)</span></td>
+	<td><span class="math">\( \ket*{  \frac{\psi + \phi}{2}   }   \)</span></td>
 	<td><code>\ket*{  }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \bra{   \psi    }   \)</span></td>
+	<td><span class="math">\( \bra{   \frac{\psi + \phi}{2}   }   \)</span></td>
 	<td><code>\bra{   }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \bra*{  \psi    }   \)</span></td>
+	<td><span class="math">\( \bra*{  \frac{\psi + \phi}{2}   }   \)</span></td>
 	<td><code>\bra*{  }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \innerproduct{a}{b}         \)</span></td>
-	<td><code>\innerproduct{a}{b}</code></td>
+	<td><span class="math">\( \innerproduct{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}         \)</span></td>
+	<td><code>\innerproduct{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \braket{a}{b}           \)</span></td>
-	<td><code>\braket{a}{b}</code></td>
+	<td><span class="math">\( \braket{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}           \)</span></td>
+	<td><code>\braket{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \braket*{a}{b}          \)</span></td>
-	<td><code>\braket*{a}{b}</code></td>
+	<td><span class="math">\( \braket*{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}          \)</span></td>
+	<td><code>\braket*{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \braket{    \psi    }   \)</span></td>
+	<td><span class="math">\( \braket{    \frac{\psi + \phi}{2}   }   \)</span></td>
 	<td><code>\braket{    }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \outerproduct{a}{b}         \)</span></td>
-	<td><code>\outerproduct{a}{b}</code></td>
+	<td><span class="math">\( \outerproduct{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}         \)</span></td>
+	<td><code>\outerproduct{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \dyad{a}{b}         \)</span></td>
-	<td><code>\dyad{a}{b}</code></td>
+	<td><span class="math">\( \dyad{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}         \)</span></td>
+	<td><code>\dyad{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \ketbra{a}{b}           \)</span></td>
-	<td><code>\ketbra{a}{b}</code></td>
+	<td><span class="math">\( \ketbra{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}           \)</span></td>
+	<td><code>\ketbra{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \op{a}{b}           \)</span></td>
-	<td><code>\op{a}{b}</code></td>
+	<td><span class="math">\( \op{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}           \)</span></td>
+	<td><code>\op{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \ketbra*{a}{b}          \)</span></td>
-	<td><code>\ketbra*{a}{b}</code></td>
+	<td><span class="math">\( \ketbra*{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}          \)</span></td>
+	<td><code>\ketbra*{\frac{\psi + \phi}{2}}{\frac{\psi + \phi}{2}}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \ketbra{    \psi    }   \)</span></td>
+	<td><span class="math">\( \ketbra{    \frac{\psi + \phi}{2}   }   \)</span></td>
 	<td><code>\ketbra{    }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \expectationvalue{  \psi    }   \)</span></td>
+	<td><span class="math">\( \expectationvalue{  \frac{\psi + \phi}{2}   }   \)</span></td>
 	<td><code>\expectationvalue{  }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \expval{    \psi    }   \)</span></td>
+	<td><span class="math">\( \expval{    \frac{\psi + \phi}{2}   }   \)</span></td>
 	<td><code>\expval{    }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \ev{    \psi    }   \)</span></td>
+	<td><span class="math">\( \ev{    \frac{\psi + \phi}{2}   }   \)</span></td>
 	<td><code>\ev{    }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \ev{    A   }{\psi} \)</span></td>
+	<td><span class="math">\( \ev{    \frac{A+B}{2}   }{\psi} \)</span></td>
 	<td><code>\ev{    }{\psi}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \ev*{   \psi    }   \)</span></td>
+	<td><span class="math">\( \ev*{   \frac{\psi + \phi}{2}   }   \)</span></td>
 	<td><code>\ev*{   }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \ev**{  \psi    }   \)</span></td>
+	<td><span class="math">\( \ev**{  \frac{\psi + \phi}{2}   }   \)</span></td>
 	<td><code>\ev**{  }</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \matrixelement{m}{  A   }{n}    \)</span></td>
+	<td><span class="math">\( \matrixelement{m}{  \frac{A+B}{2}   }{n}    \)</span></td>
 	<td><code>\matrixelement{m}{  }{n}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \matrixel{m}{   A   }{n}    \)</span></td>
+	<td><span class="math">\( \matrixel{m}{   \frac{A+B}{2}   }{n}    \)</span></td>
 	<td><code>\matrixel{m}{   }{n}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \mel{m}{    A   }{n}    \)</span></td>
+	<td><span class="math">\( \mel{m}{    \frac{A+B}{2}   }{n}    \)</span></td>
 	<td><code>\mel{m}{    }{n}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \mel*{m}{   A   }{n}    \)</span></td>
+	<td><span class="math">\( \mel*{m}{   \frac{A+B}{2}   }{n}    \)</span></td>
 	<td><code>\mel*{m}{   }{n}</code></td>
 </tr>
 <tr>
-	<td><span class="math">\( \mel**{m}{  A   }{n}    \)</span></td>
+	<td><span class="math">\( \mel**{m}{  \frac{A+B}{2}   }{n}    \)</span></td>
 	<td><code>\mel**{m}{  }{n}</code></td>
 </tr>
 </tbody>
@@ -739,11 +739,7 @@ All Rights Reserved."/>
 <hr />
 <ol>
 <li id="fn:1">
-<p>If you are laughing right now, you should really consider contributing. See <a href="#commandsnotworkingandhelpsneeded">Commands not Working and Helps Needed</a>. <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
-</li>
-
-<li id="fn:2">
-<p>This relies on the CDN of MathJax. i.e. there will be a delay. To see instantaneous test, use <a href="https://ickc.github.io/MathJax-third-party-extensions/physics/test/macro.html">macro.html</a>. <a href="#fnref:2" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+<p>This relies on the CDN of MathJax. i.e. there will be a delay. To see instantaneous test, use <a href="https://ickc.github.io/MathJax-third-party-extensions/physics/test/macro.html">macro.html</a>. <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
 </li>
 
 </ol>

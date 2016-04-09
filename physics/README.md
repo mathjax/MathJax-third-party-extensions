@@ -1,7 +1,7 @@
 ---
 HTML Header:	<script type="text/x-mathjax-config">MathJax.Ajax.config.path.Contrib="https://cdn.mathjax.org/mathjax/contrib",MathJax.Hub.Register.StartupHook("TeX Jax Ready",function(){MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{cancel:["Extension","cancel"],bcancel:["Extension","cancel"],xcancel:["Extension","cancel"],cancelto:["Extension","cancel"]})}),MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["[Contrib]/physics/physics.js","[Contrib]/siunitx/siunitx.js"]}});</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full"></script>
-CSS:	https://ickc.github.io/multimarkdown-latex-css/combined-css/multimarkdown-latex.css
-CSS:	https://ickc.github.io/multimarkdown-setup/css/github 2.css
+CSS:	https://ickc.github.io/multimarkdown-latex-css/css/multimarkdown-latex-lmodern.css
+CSS:	https://ickc.github.io/multimarkdown-latex-css/fonts/fonts.css
 HTML Header Level:	1
 LaTeX Header Level:	2
 LaTeX Input:	mmd-article-header
@@ -15,7 +15,7 @@ LaTeX Input:	mmd-load-amsthm
 Title:	LaTeX Physics Package in MathJax  
 Subtitle:	Mimicking Some of the Commands in LaTeX Physics Package
 Keywords:	Physics Package
-Revision:	0.10
+Revision:	0.11
 Language:	English
 Author:	Kolen Cheung
 Email:	khcheung@berkeley.edu
@@ -38,7 +38,7 @@ LaTeX Footer:	mmd-memoir-footer
 
 This extension is to mimics [LaTeX Physics Package](http://www.ctan.org/pkg/physics) in MathJax.
 
-# Commands not Working and Helps Needed
+# Some Commands are not Working
 
 The following commands in the Physics Package is not implemented yet:
 
@@ -49,11 +49,11 @@ The following commands in the Physics Package is not implemented yet:
 	3. variable no. of arguments
 - Examples of commands that doesn't work: `\dv`: has all the properties mentioned above
 
-As I mentioned, everything done so far is by string substitution only. If you know more about Javascript and MathJax, and want to use the [LaTeX Physics Package](http://www.ctan.org/pkg/physics) in MathJax, please consider contributing. Some hints are given in [Pull Request#16---MathJax-third-party-extensions](https://github.com/mathjax/MathJax-third-party-extensions/pull/16) but I am too stupid to understand how the above cases should be handled.
+As I mentioned, everything done so far is by string substitution only. Some hints are given in [Pull Request#16---MathJax-third-party-extensions](https://github.com/mathjax/MathJax-third-party-extensions/pull/16) but I am too stupid to understand how the above cases should be handled. Feel free to improve it though.
 
 # Organization #
 
-`physics.xlsx` is the master file[^ If you are laughing right now, you should really consider contributing. See [Commands not Working and Helps Needed][].].
+`physics.xlsx` is the master file.
 
 - Columns A-L are copied to [test/tables.md](test/tables.md)
 - Columns M-V are copied to [unpacked/physics.js](unpacked/physics.js)
