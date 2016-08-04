@@ -26,19 +26,25 @@
  *  limitations under the License.
  */
 
+//
+// Coding Style
+//   - use '' for identifiers that can by minified/uglified
+//   - use "" for strings that need to stay untouched
+
+
 MathJax.Extension["TeX/mhchem"] = {
-  version: "3.0.0"
+  version: "3.0.1"
 };
 
 MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 
   var TEX = MathJax.InputJax.TeX;
 
-  /*
-   *  This is the main class for handing the \ce and related commands.
-   *  Its main method is Parse() which takes the argument to \ce and
-   *  returns the corresponding TeX string.
-   */
+  //
+  //  This is the main class for handing the \ce and related commands.
+  //  Its main method is Parse() which takes the argument to \ce and
+  //  returns the corresponding TeX string.
+  //
 
   var CE = MathJax.Object.Subclass({
     string: "",   // the \ce string being parsed
@@ -156,7 +162,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
                 } else if (mhchemParser.actions[a]) {
                   o = mhchemParser.actions[a](buffer, matches.matchh, option);
                 } else {
-                  throw ["InternalMhchemErrorNonExistingAction", "Internal mhchem Error \u2013 Trying to use non-existing action (" + a + ")"];
+                  throw ["MhchemBugA", "mhchem bug A. Please report. (" + a + ")"];  // Trying to use non-existing action
                 }
               } else if (typeof a === "function") {
                 o = a(buffer, matches.matchh);
@@ -187,7 +193,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       // Prevent infinite loop
       //
       if (watchdog <= 0) {
-        throw ["MhchemErrorUnexpectedCharacter", "mhchem Error \u2013 Unexpected character"];
+        throw ["MhchemBugU", "mhchem bug U. Please report."];  // Unexpected character
       }
     }
   };
@@ -212,11 +218,11 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     'x': /^x/,
     'x$': /^x$/,
     'i$': /^i$/,
-    'letters': /^(?:[a-zA-Z\u03B1-\u03C9\u0391-\u03A9?@]|(?:\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega)(?:\ |(?![a-zA-Z]))))+/,
-    '\\greek': /^\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega)(?:\ |(?![a-zA-Z]))/,
+    'letters': /^(?:[a-zA-Z\u03B1-\u03C9\u0391-\u03A9?@]|(?:\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega)(?:\s+|\{\}|(?![a-zA-Z]))))+/,
+    '\\greek': /^\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega)(?:\s+|\{\}|(?![a-zA-Z]))/,
     'one lowercase latin letter $': /^(?:([a-z])(?:$|[^a-zA-Z]))$/,
     '$one lowercase latin letter$ $': /^\$(?:([a-z])(?:$|[^a-zA-Z]))\$$/,
-    'one lowercase greek letter $': /^(?:\$?[\u03B1-\u03C9]\$?|\$?\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega)\$?(?:$|[^a-zA-Z]))$/,
+    'one lowercase greek letter $': /^(?:\$?[\u03B1-\u03C9]\$?|\$?\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega)\s*\$?)(?:\s+|\{\}|(?![a-zA-Z]))$/,
     'digits': /^[0-9]+/,
     '-9.,9': /^[+\-]?(?:[0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+))/,
     '-9.,9 no missing 0': /^[+\-]?[0-9]+(?:[.,][0-9]+)?/,
@@ -230,7 +236,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     'state of aggregation $':  function (input) {  // or crystal system
       var a = this['_findObserveGroups'](input, "", /^\([a-z]{1,3}(?=[\),])/, ")", "");
       if (a  &&  a.remainder.match(/^($|[\s,;\)\]\}])/))  return a;
-      var m = input.match(/^(?:\(\$(?:\\ca)?[amothc]\$\))/);  // crystal system
+      var m = input.match(/^(?:\(\$(?:\\ca\s+)?[amothc]\$\))/);  // crystal system
       if (m) {
         return { matchh: m[0], remainder: input.substr(m[0].length) };
       }
@@ -249,7 +255,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     '^a': /^\^([0-9]+|[^\\_])/,
     '^\\x{}{}':  function (input) { return this['_findObserveGroups'](input, "^", /^\\[a-zA-Z]+\{/, "}", "", "", "{", "}", "", true); },
     '^\\x{}':  function (input) { return this['_findObserveGroups'](input, "^", /^\\[a-zA-Z]+\{/, "}", ""); },
-    '^\\x ': /^\^(\\[a-zA-Z]+)\s*/,
+    '^\\x': /^\^(\\[a-zA-Z]+)\s*/,
     '^(-1)': /^\^(-\d)/,
     '\'': /^'/,
     '_{(...)}': function (input) { return this['_findObserveGroups'](input, "_{", "", "", "}"); },
@@ -257,7 +263,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     '_9': /^_([+\-]?[0-9]+|[^\\])/,
     '_\\x{}{}':  function (input) { return this['_findObserveGroups'](input, "_", /^\\[a-zA-Z]+\{/, "}", "", "", "{", "}", "", true); },
     '_\\x{}':  function (input) { return this['_findObserveGroups'](input, "_", /^\\[a-zA-Z]+\{/, "}", ""); },
-    '_\\x': /^_(\\[a-zA-Z]+)/,
+    '_\\x': /^_(\\[a-zA-Z]+)\s*/,
     '^_': /^(?:\^(?=_)|\_(?=\^)|[\^_]$)/,
     '{}': /^\{\}/,
     '{...}': function (input) { return this['_findObserveGroups'](input, "", "{", "}", ""); },
@@ -272,7 +278,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     '-9': /^-(?=[0-9])/,
     '- orbital overlap': /^-(?=(?:[spd]|sp)(?:$|[\s,;\)\]\}]))/,
     '-': /^-/,
-    'operator': /^(?:[+]|(?:[\-=<>]|<<|>>|\\pm|\$\\pm\$|\\approx|\$\\approx\$)(?=\s|$|-?[0-9]))/,
+    'operator': /^(?:[+]|(?:[\-=<>]|<<|>>|\\pm|\$\\pm\$|\\approx|\$\\approx\$)(?=\s+|$|-?[0-9]))/,
     'arrowUpDown': /^(?:v|\(v\)|\^|\(\^\))(?=$|[\s,;\)\]\}])/,
     '\\bond{(...)}': function (input) { return this['_findObserveGroups'](input, "\\bond{", "", "", "}"); },
     '->': /^(?:<->|<-->|->|<-|<=>>|<<=>|<=>|[\u2192\u27F6\u21CC])/,
@@ -280,15 +286,13 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     '[(...)]': function (input) { return this['_findObserveGroups'](input, "[", "", "", "]"); },
     '&': /^(&)\s*/,
     '\\\\': /^(\\\\)\s*/,
-    '\\,': /^(?:\\[,\ ;:])/,  // \\x but with no space before
+    '\\,': /^(?:\\[,\ ;:])/,  // \\x - but output no space before
     '\\x{}{}':  function (input) { return this['_findObserveGroups'](input, "", /^\\[a-zA-Z]+\{/, "}", "", "", "{", "}", "", true); },
     '\\x{}':  function (input) { return this['_findObserveGroups'](input, "", /^\\[a-zA-Z]+\{/, "}", ""); },
-    '\\ca ': /^\\ca\s/,
-    '\\ca': /^\\ca(?=$|[^a-zA-Z])/,
-    '\\x ': /^\\[a-zA-Z]+\s/,
-    '\\x': /^(?:\\[a-zA-Z]+|\\[_&{}%])/,
+    '\\ca': /^\\ca(?:\s+|(?![a-zA-Z]))/,
+    '\\x': /^(?:\\[a-zA-Z]+\s*|\\[_&{}%])/,
     'orbital': /^(?:[0-9]{1,2}[spdfgh]|[0-9]{0,2}sp)(?=$|[^a-zA-Z])/,  // only those with numbers in front, because the others will be formatted correctly anyway
-    'others': /^[:\/'\u2019~|]/,  //fimxe ' weg
+    'others': /^[\/~|]/,
     '\\frac{(...)}': function (input) { return this['_findObserveGroups'](input, "\\frac{", "", "", "}", "{", "", "", "}"); },
     '\\overset{(...)}': function (input) { return this['_findObserveGroups'](input, "\\overset{", "", "", "}", "{", "", "", "}"); },
     '\\underset{(...)}': function (input) { return this['_findObserveGroups'](input, "\\underset{", "", "", "}", "{", "", "", "}"); },
@@ -297,7 +301,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     '\\color{(...)}{(...)}1': function (input) { return this['_findObserveGroups'](input, "\\color{", "", "", "}", "{", "", "", "}"); },
     '\\color(...){(...)}2': function (input) { return this['_findObserveGroups'](input, "\\color", "\\", "", /^(?=\{)/, "{", "", "", "}"); },
     '\\ce{(...)}': function (input) { return this['_findObserveGroups'](input, "\\ce{", "", "", "}"); },
-    'oxidation$': /^(?:[+\-]?\s?[IVX]+|\\pm\s?0|\$\\pm\$\s?0)$/,  // 0 could be oxidation or charge
+    'oxidation$': /^(?:[+\-]?\s?[IVX]+|\\pm\s*0|\$\\pm\$\s*0)$/,  // 0 could be oxidation or charge
     'roman numeral': /^[IVX]+/,
     '1/2$': /^[+\-]?[0-9]+\/[0-9]+$/,
     'amount': function (input) {
@@ -309,7 +313,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
           return { matchh: matchh[0], remainder: input.substr(matchh[0].length) };
         }
       } else {  // e.g. 2, 0.5, 1/2, -2, +, \pm0
-        matchh = input.match(/^(?:(?:(?:\([+\-]?[0-9]+\/[0-9]+\)|[+\-]?[0-9]+\/[0-9]+|[+\-]?[0-9]+[.,][0-9]+|[+\-]?\.[0-9]+|[+\-]?[0-9]+)(?:[a-z](?=\s*[A-Z]))?)|[+\-]?[a-z](?=\s*[A-Z])|\+(?!\s)|\\pm\s?)/);
+        matchh = input.match(/^(?:(?:(?:\([+\-]?[0-9]+\/[0-9]+\)|[+\-]?[0-9]+\/[0-9]+|[+\-]?[0-9]+[.,][0-9]+|[+\-]?\.[0-9]+|[+\-]?[0-9]+)(?:[a-z](?=\s*[A-Z]))?)|[+\-]?[a-z](?=\s*[A-Z])|\+(?!\s)|\\pm(?:\s+|(?![a-zA-Z])))/);
         if (matchh) {
           return { matchh: matchh[0], remainder: input.substr(matchh[0].length) };
         }
@@ -400,7 +404,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   mhchemParser.matchh = function (m, input) {
     var pattern = mhchemParser.patterns[m];
     if (pattern === undefined) {
-      throw ["InternalMhchemErrorNonExistingPattern", "Internal mhchem Error \u2013 Trying to use non-existing pattern (" + m + ")"];
+      throw ["MhchemBugP", "mhchem bug P. Please report. (" + m + ")"];  // Trying to use non-existing pattern
     } else if (typeof pattern === "function") {
       return mhchemParser.patterns[m](input);  // cannot use cached var pattern here, because some pattern functions need this===mhchemParser
     } else {  // RegExp
@@ -543,7 +547,8 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         'd|D': { action: 'd=', nextState: 'd' },
         'q': { action: 'd=',  nextState: 'qd' },
         'qd|qD': { action: 'd=', nextState: 'qd' },
-        'dq': { action: [ 'output', 'd=' ], nextState: 'd' } },
+        'dq': { action: [ 'output', 'd=' ], nextState: 'd' },
+        '3': { action: [ 'sb=false', 'output', 'operator' ], nextState: '0' } },
       'amount': {
         '0|2': { action: 'a=', nextState: 'a' } },
       'operator': {
@@ -622,7 +627,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         '3|o': { action: 'd= kv', nextState: 'D' },
         'q': { action: 'd=', nextState: 'qD' },
         'd|D|qd|qD|dq': { action: [ 'output', 'd=' ], nextState: 'D' } },
-      '^a|^\\x{}{}|^\\x{}|^\\x |\'': {
+      '^a|^\\x{}{}|^\\x{}|^\\x|\'': {
         '0|1|2|as': { action: 'b=', nextState: 'b' },
         'p': { action: 'b=', nextState: 'bp' },
         '3|o': { action: 'd= kv', nextState: 'd' },
@@ -667,11 +672,8 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         '*': { action: [ { type: 'output', option: 2 }, 'ce' ], nextState: '3' } },
       '\\,': {
         '*': { action: [ { type: 'output', option: 1 }, 'copy' ], nextState: '1' } },
-      '\\ca |\\ca': {
+      '\\ca': {
         '*': { action: [ { type: 'output', option: 1 }, { type: 'insert', option: 'circa' } ], nextState: '3' } },
-      '\\x ': {
-        '0|1|2|3|a|as|b|p|bp|o|c0': { action: [ 'o=', 'output' ], nextState: '1' },
-        '*': { action: ['output', 'o=', 'output' ], nextState: '1' } },
       '\\x{}{}|\\x{}|\\x': {
         '0|1|2|3|a|as|b|p|bp|o|c0': { action: [ 'o=', 'output' ], nextState: '3' },
         '*': { action: ['output', 'o=', 'output' ], nextState: '3' } },
@@ -775,7 +777,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       'output': function (buffer, m, entityFollows) {
         // entityFollows:
         //   undefined = if we have nothing else to output, also ignore the just read space (buffer.sb)
-        //   1 = an entity follows, never omit the space if there was one before (can only apply to state 1)
+        //   1 = an entity follows, never omit the space if there was one just read before (can only apply to state 1)
         //   2 = 1 + the entity can have an amount, so output a\, instead of converting it to o (can only apply to states a|as)
         var ret;
         if (!buffer.r) {
@@ -931,7 +933,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         '*': { action: 'tex-math' } },
       '\\greek': {
         '*': { action: [ 'output', 'rm' ] } },
-      '\\,|\\x{}{}|\\x{}|\\x |\\x': {
+      '\\,|\\x{}{}|\\x{}|\\x': {
         '*': { action: [ 'output', 'copy' ] } },
       'else': {
         '*': { action: 'text=' } }
@@ -984,7 +986,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         '*': { action: 'color0-output' } },
       '\\ce{(...)}': {
         '*': { action: 'ce' } },
-      '\\,|\\x{}{}|\\x{}|\\x |\\x': {
+      '\\,|\\x{}{}|\\x{}|\\x': {
         '*': { action: 'copy' } },
       'else2': {
         '*': { action: 'copy' } }
@@ -1034,7 +1036,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         '*': { action: 'color0-output' } },
       '\\ce{(...)}': {
         '*': { action: 'ce' } },
-      '\\,|\\x{}{}|\\x{}|\\x |\\x': {
+      '\\,|\\x{}{}|\\x{}|\\x': {
         '*': { action: 'copy' } },
       'else2': {
         '*': { action: 'copy' } }
@@ -1072,7 +1074,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         '*': { action: 'output' } },
       '\\ce{(...)}': {
         '*': { action: [ 'output', 'ce' ] } },
-      '{...}|\\,|\\x{}{}|\\x{}|\\x |\\x': {
+      '{...}|\\,|\\x{}{}|\\x{}|\\x': {
         '*': { action: 'o=' } },
       'else': {
         '*': { action: 'o=' } }
@@ -1097,7 +1099,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         '*': { action: 'output' } },
       '\\ce{(...)}': {
         '*': { action: [ 'output', 'ce' ] } },
-      '{...}|\\,|\\x{}{}|\\x{}|\\x |\\x': {
+      '{...}|\\,|\\x{}{}|\\x{}|\\x': {
         '*': { action: 'o=' } },
       '-|+': {
         '*': { action: 'tight operator' } },
@@ -1155,7 +1157,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         '/|q': { action: 'q=', nextState: 'q' } }
     }),
     actions: {
-      'enumber': function (buffer, m) {  //fixme m ist kein array
+      'enumber': function (buffer, m) {
         var ret = [];
         if (m[0]) {
           ret.push(m[0]);
@@ -1377,7 +1379,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       'bond': function (buf) {
         var ret = texify.bonds[buf.kind];
         if (!ret) {
-          throw ["MhchemErrorUnknownBond", "mhchem Error \u2013 Unknown bond type (" + buf.kind + ")"];
+          throw ["MhchemErrorBond", "mhchem Error. Unknown bond type (" + buf.kind + ")"];
         }
         return ret;
       },
@@ -1520,7 +1522,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
           a = a.replace("{1}", inputi.p2 || "");
           res += a;
         } else {
-          throw ["InternalMhchemErrorUnknownMhchemParserOutput", "Internal mhchem Error \u2013 Unknown MhchemParser output"];
+          throw ["MhchemBugT", "mhchem bug T. Please report."];  // Missing texify rule or unknown MhchemParser output
         }
       }
       return res;
@@ -1536,16 +1538,16 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       //
       //  Set up the macros for chemistry
       //
-      ce:   'CE',
-      pu:   'PU',
+      ce:   "CE",
+      pu:   "PU",
 
       //
       //  Make these load AMSmath package (redefined below when loaded)
       //
-      xleftrightarrow:    ['Extension','AMSmath'],
-      xrightleftharpoons: ['Extension','AMSmath'],
-      xRightleftharpoons: ['Extension','AMSmath'],
-      xLeftrightharpoons: ['Extension','AMSmath'],
+      xleftrightarrow:    ["Extension","AMSmath"],
+      xrightleftharpoons: ["Extension","AMSmath"],
+      xRightleftharpoons: ["Extension","AMSmath"],
+      xLeftrightharpoons: ["Extension","AMSmath"],
 
       //  FIXME:  These don't work well in FF NativeMML mode
       longrightleftharpoons: ["Macro","\\stackrel{\\textstyle{{-}\\!\\!{\\rightharpoonup}}}{\\smash{{\\leftharpoondown}\\!\\!{-}}}"],
@@ -1563,15 +1565,15 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     //  Needed for \bond for the ~ forms
     //
     environment: {
-      CEstack:       ['Array',null,null,null,'r',null,"0.001em",'T',1]
+      CEstack:       ["Array",null,null,null,"r",null,"0.001em","T",1]
     }
   },null,true);
 
   if (!MathJax.Extension["TeX/AMSmath"]) {
     TEX.Definitions.Add({
       macros: {
-        xrightarrow: ['Extension','AMSmath'],
-        xleftarrow:  ['Extension','AMSmath']
+        xrightarrow: ["Extension","AMSmath"],
+        xleftarrow:  ["Extension","AMSmath"]
       }
     },null,true);
   }
@@ -1585,10 +1587,10 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         //
         //  Some of these are hacks for now
         //
-        xleftrightarrow:    ['xArrow',0x2194,6,6],
-        xrightleftharpoons: ['xArrow',0x21CC,5,7],  // FIXME:  doesn't stretch in HTML-CSS output
-        xRightleftharpoons: ['xArrow',0x21CC,5,7],  // FIXME:  how should this be handled?
-        xLeftrightharpoons: ['xArrow',0x21CC,5,7]
+        xleftrightarrow:    ["xArrow",0x2194,6,6],
+        xrightleftharpoons: ["xArrow",0x21CC,5,7],  // FIXME:  doesn't stretch in HTML-CSS output
+        xRightleftharpoons: ["xArrow",0x21CC,5,7],  // FIXME:  how should this be handled?
+        xLeftrightharpoons: ["xArrow",0x21CC,5,7]
       }
     },null,true);
   });
