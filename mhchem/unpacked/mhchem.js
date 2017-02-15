@@ -33,7 +33,7 @@
 
 
 MathJax.Extension["TeX/mhchem"] = {
-  version: "3.0.4"
+  version: "3.0.5"
 };
 
 MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
@@ -121,6 +121,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     buffer['parenthesisLevel'] = 0;
 
     input = input.replace(/[\u2212\u2013\u2014\u2010]/g, "-");
+    input = input.replace(/[\u2026]/g, "...");
 
     var lastInput, watchdog;
     var output = [];
@@ -137,12 +138,12 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       var machine = mhchemParser.stateMachines[stateMachine];
       var iTmax = machine.transitions.length;
       iterateTransitions:
-      for (var iT=0; iT<iTmax; iT++) {
+      for (var iT=0; iT<iTmax; iT++) {  // Surprisingly, looping is not slower than another data structure with direct lookups.  635d910e-0a6d-45b4-8d38-2f98ac9d9a94
         var t = machine.transitions[iT];
-        var matches = mhchemParser.matchh(t.matchh, input);
-        if (matches) {
-          var tasks = t.actions[state]  ||  t.actions['*']  || null;
-          if (tasks) {
+        var tasks = t.actions[state]  ||  t.actions['*']  ||  null;
+        if (tasks) {  // testing tasks (actions) before matches is slightly faster
+          var matches = mhchemParser.matchh(t.matchh, input);
+          if (matches) {
             //
             // Execute action
             //
@@ -227,21 +228,22 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     '-9.,9': /^[+\-]?(?:[0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+))/,
     '-9.,9 no missing 0': /^[+\-]?[0-9]+(?:[.,][0-9]+)?/,
     '(-)(9.,9)(e)(99)': function (input) {
-      var m = input.match(/^([+\-]?)([0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+)?)(?:([eE])([+\-]?[0-9]+))?\s*/);
+      var m = input.match(/^(\+\-|\+|\-|\\pm\s?)?([0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+)?)(?:([eE])([+\-]?[0-9]+))?\s*/);
       if (m && m[0]) {
         return { matchh: m.splice(1), remainder: input.substr(m[0].length) };
       }
       return null;
     },
-    'state of aggregation $':  function (input) {  // or crystal system
-      var a = this['_findObserveGroups'](input, "", /^\([a-z]{1,3}(?=[\),])/, ")", "");
-      if (a  &&  a.remainder.match(/^($|[\s,;\)\]\}])/))  { return a; }
-      var m = input.match(/^(?:\(\$(?:\\ca\s+)?[amothc]\$\))/);  // crystal system
+    'state of aggregation $': function (input) {  // or crystal system
+      var a = this['_findObserveGroups'](input, "", /^\([a-z]{1,3}(?=[\),])/, ")", "");  // (aq), (aq,$\infty$), (aq, sat)
+      if (a  &&  a.remainder.match(/^($|[\s,;\)\]\}])/)) { return a; }  //  AND end of 'phrase'
+      var m = input.match(/^(?:\((?:\\ca\s?)?\$[amothc]\$\))/);  // OR crystal system ($o$) (\ca$c$)
       if (m) {
         return { matchh: m[0], remainder: input.substr(m[0].length) };
       }
       return null;
     },
+    '_{(state of aggregation)}$': /^_\{(\([a-z]{1,3}\))\}/,
     '\{[(': /^(?:\\\{|\[|\()/,
     ')]\}': /^(?:\)|\]|\\\})/,
     ', ': /^[,;]\s*/,
@@ -256,7 +258,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     '^\\x{}{}':  function (input) { return this['_findObserveGroups'](input, "^", /^\\[a-zA-Z]+\{/, "}", "", "", "{", "}", "", true); },
     '^\\x{}':  function (input) { return this['_findObserveGroups'](input, "^", /^\\[a-zA-Z]+\{/, "}", ""); },
     '^\\x': /^\^(\\[a-zA-Z]+)\s*/,
-    '^(-1)': /^\^(-\d)/,
+    '^(-1)': /^\^?(-?\d+)/,
     '\'': /^'/,
     '_{(...)}': function (input) { return this['_findObserveGroups'](input, "_{", "", "", "}"); },
     '_($...$)': function (input) { return this['_findObserveGroups'](input, "_", "$", "$", ""); },
@@ -324,7 +326,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     'amount2': function (input) { return this['amount'](input); },
     '(KV letters),': /^(?:[A-Z][a-z]{0,2}|i)(?=,)/,
     'formula$': function (input) {
-      if (input.match(/^\([a-z]+\)$/))  { return null; }  // state of aggregation = no formula
+      if (input.match(/^\([a-z]+\)$/)) { return null; }  // state of aggregation = no formula
       var matchh = input.match(/^(?:[a-z]|(?:[0-9\ \+\-\,\.\(\)]+[a-z])+[0-9\ \+\-\,\.\(\)]*|(?:[a-z][0-9\ \+\-\,\.\(\)]+)+[a-z]?)$/);
       if (matchh) {
         return { matchh: matchh[0], remainder: input.substr(matchh[0].length) };
@@ -332,19 +334,23 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       return null;
     },
     'uprightEntities': /^(?:pH|pOH|pC|pK|iPr|iBu)(?=$|[^a-zA-Z])/,
-    'dissociationConstant1': /^(p)?K(?:_?(a|b|w))(?=$|[^a-zA-Z])/,
-    'dissociationConstant2': /^(p)?K(?:_{(a|b|w)})/,
+    'pKConstant1': /^pK([abw]|eq|sp)(?=$|[^a-zA-Z0-9])/,  // acid/base dissociation constant, freezing/boiling-point depression, ionic product for water, equilibrium constants
+    'pKConstant2': /^pK_([abw])/,
+    'pKConstant3': /^pK_{([abw]|eq|sp)}/,
+    'KConstant1': /^K([abwfcp]|eq|sp)(?=$|[^a-zA-Z0-9])/,
+    'KConstant2': /^K_([abwfcpCP])/,
+    'KConstant3': /^K_{([abwfcpCP]|eq|sp)}/,
     '/': /^\s*(\/)\s*/,
     '//': /^\s*(\/\/)\s*/,
     '*': /^\s*\*\s*/,
     '_findObserveGroups': function (input, begExcl, begIncl, endIncl, endExcl, beg2Excl, beg2Incl, end2Incl, end2Excl, combine) {
       var matchh = this['__match'](input, begExcl);
-      if (matchh === null)  { return null; }
+      if (matchh === null) { return null; }
       input = input.substr(matchh.length);
       matchh = this['__match'](input, begIncl);
-      if (matchh === null)  { return null; }
+      if (matchh === null) { return null; }
       var e = this['__findObserveGroups'](input, matchh.length, endIncl || endExcl);
-      if (e === null)  { return null; }
+      if (e === null) { return null; }
       var match1 = input.substring(0, (endIncl ? e.endMatchEnd : e.endMatchBegin));
       if (!(beg2Excl || beg2Incl)) {
         return {
@@ -353,7 +359,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         };
       } else {
         var group2 = this['_findObserveGroups'](input.substr(e.endMatchEnd), beg2Excl, beg2Incl, end2Incl, end2Excl);
-        if (group2 === null)  { return null; }
+        if (group2 === null) { return null; }
         var matchRet = [match1, group2.matchh];
         if (combine) { matchRet = matchRet.join(""); }
         return {
@@ -364,11 +370,11 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     },
     '__match': function (input, pattern) {
       if (typeof pattern === "string") {
-        if (input.indexOf(pattern) !== 0)  { return null; }
+        if (input.indexOf(pattern) !== 0) { return null; }
         return pattern;
       } else {
         var matchh = input.match(pattern);
-        if (!matchh)  { return null; }
+        if (!matchh) { return null; }
         return matchh[0];
       }
     },
@@ -535,8 +541,10 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         'rd': { action: 'rqt=', nextState: 'rdt' } },
       'arrowUpDown': {
         '0|1|2|as': { action: [ 'sb=false', 'output', 'operator' ], nextState: '1' } },
-      'dissociationConstant1|dissociationConstant2': {
-        '0|1|2': { action: [ { type: 'output', option: 1 }, { type: 'insert+p1+p2', option: 'dissociationConstant' } ], nextState: '1' } },
+      'pKConstant1|pKConstant2|pKConstant3': {
+        '0|1|2': { action: [ { type: 'output', option: 1 }, { type: 'insert+p1', option: 'pKConstant' } ], nextState: '1' } },
+      'KConstant1|KConstant2|KConstant3': {
+        '0|1|2': { action: [ { type: 'output', option: 1 }, { type: 'insert+p1', option: 'KConstant' } ], nextState: '1' } },
       'uprightEntities': {
         '0|1|2': { action: [ 'o=', 'output' ], nextState: '1' } },
       'orbital': {
@@ -635,8 +643,10 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         'p': { action: 'b=', nextState: 'bp' },
         '3|o': { action: 'd= kv', nextState: 'd' },
         'q': { action: 'd=', nextState: 'qd' },
-        'd|qd|D|qD|': { action: 'd=' },
+        'd|qd|D|qD': { action: 'd=' },
         'dq': { action: [ 'output', 'd=' ], nextState: 'd' } },
+      '_{(state of aggregation)}$': {
+        'd|D|q|qd|qD|dq': { action: [ 'output', 'q=' ], nextState: 'q' } },
       '_{(...)}|_($...$)|_9|_\\x{}{}|_\\x{}|_\\x': {
         '0|1|2|as': { action: 'p=', nextState: 'p' },
         'b': { action: 'p=', nextState: 'bp' },
@@ -675,8 +685,6 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         '*': { action: [ { type: 'output', option: 2 }, 'ce' ], nextState: '3' } },
       '\\,': {
         '*': { action: [ { type: 'output', option: 1 }, 'copy' ], nextState: '1' } },
-      '\\ca': {
-        '*': { action: [ { type: 'output', option: 1 }, { type: 'insert', option: 'circa' } ], nextState: '3' } },
       '\\x{}{}|\\x{}|\\x': {
         '0|1|2|3|a|as|b|p|bp|o|c0': { action: [ 'o=', 'output' ], nextState: '3' },
         '*': { action: ['output', 'o=', 'output' ], nextState: '3' } },
@@ -918,6 +926,8 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         '0': { nextState: '1', revisit: true } },
       'letters': {
         '*': { action: 'rm' } },
+      '\\ca': {
+        '*': { action: { type: 'insert', option: 'circa' } } },
       '\\x{}{}|\\x{}|\\x': {
         '*': { action: 'copy' } },
       '${(...)}$|$(...)$': {
@@ -1168,14 +1178,16 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     actions: {
       'enumber': function (buffer, m) {
         var ret = [];
-        if (m[0]) {
+        if (m[0] === "+-") {
+          ret.push("\\pm ");
+        } else if (m[0]) {
           ret.push(m[0]);
         }
         if (m[1]) {
           ret = mhchemParser.concatNotUndefined(ret, mhchemParser.go(m[1], 'pu-9,9'));
-          if (m[2] === 'e') {
+          if (m[2] === "e") {
             ret.push({ type: 'cdot' });
-          } else if (m[2] === 'E') {
+          } else if (m[2] === "E") {
               ret.push({ type: 'times' });
           }
         }
@@ -1191,8 +1203,12 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         if (md  &&  md.remainder === '') { buffer.d = md.matchh; }
         var mq = mhchemParser.matchh('{(...)}', buffer.q || '');
         if (mq  &&  mq.remainder === '') { buffer.q = mq.matchh; }
-        if (buffer.q) {
+        if (buffer.q) {  // fraction
+          buffer.d = buffer.d.replace(/\u00B0C|\^oC|\^{o}C/g, "^{\\circ}C");
+          buffer.d = buffer.d.replace(/\u00B0F|\^oF|\^{o}F/g, "^{\\circ}F");
           buffer.d = mhchemParser.go(buffer.d, 'pu');
+          buffer.q = buffer.q.replace(/\u00B0C|\^oC|\^{o}C/g, "^{\\circ}C");
+          buffer.q = buffer.q.replace(/\u00B0F|\^oF|\^{o}F/g, "^{\\circ}F");
           buffer.q = mhchemParser.go(buffer.q, 'pu');
           if (buffer.o === '//') {
             ret = { type: 'frac-r', p1: buffer.d, p2: buffer.q };
@@ -1275,25 +1291,33 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       'comma': function (buffer, m) { return { type: 'commaDecimal' }; },
       'output-0': function (buffer, m) {
         var ret = [];
-        var a = buffer.text.length % 3;
-        if (!a) { a = 3; }
-        for (var i=buffer.text.length-3; i>0; i-=3) {
-          ret.push(buffer.text.substr(i, 3));
-          ret.push({ type: '1000 separator' });
+        if (buffer.text.length > 4) {
+            var a = buffer.text.length % 3;
+            if (a === 0) { a = 3; }
+            for (var i=buffer.text.length-3; i>0; i-=3) {
+              ret.push(buffer.text.substr(i, 3));
+              ret.push({ type: '1000 separator' });
+            }
+            ret.push(buffer.text.substr(0, a));
+            ret.reverse();
+        } else {
+            ret.push(buffer.text);
         }
-        ret.push(buffer.text.substr(0, a));
-        ret.reverse();
         for (var p in buffer) { delete buffer[p]; }
         return ret;
       },
       'output-o': function (buffer, m) {
         var ret = [];
-        var a = buffer.text.length - 3;
-        for (var i=0; i<a; i+=3) {
-          ret.push(buffer.text.substr(i, 3));
-          ret.push({ type: '1000 separator' });
+        if (buffer.text.length > 4) {
+            var a = buffer.text.length - 3;
+            for (var i=0; i<a; i+=3) {
+              ret.push(buffer.text.substr(i, 3));
+              ret.push({ type: '1000 separator' });
+            }
+            ret.push(buffer.text.substr(i));
+        } else {
+            ret.push(buffer.text);
         }
-        ret.push(buffer.text.substr(i));
         for (var p in buffer) { delete buffer[p]; }
         return ret;
       }
@@ -1478,7 +1502,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       'space': " ",
       'entitySkip': "~",
       'pu-space': "\\mkern3mu ",
-      '1000 separator': "\\mkern3mu ",
+      '1000 separator': "\\mkern2mu ",
       'commaDecimal': "{,}",
       'comma enumeration L': "{{0}}\\mkern6mu ",
       'comma enumeration M': "{{0}}\\mkern3mu ",
@@ -1495,7 +1519,8 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       '^': "uparrow",
       'v': "downarrow",
       'ellipsis': "\\ldots ",
-      'dissociationConstant': "\\mathrm{{0}}K_{\\mathrm{{1}}}",
+      'pKConstant': "\\mathrm{p}K_{\\mathrm{{0}}}",
+      'KConstant': "K_{\\mathrm{{0}}}",
       '/': "/",
       ' / ': "\\,/\\,"
     },
