@@ -1,45 +1,55 @@
 mathjax-third-party-extensions
 ==============================
 
-A collection of MathJax extensions provided by third-party contributors. This repository is mirrored on the MathJax CDN.
+A list of MathJax extensions provided by third-party contributors. 
+
+**Note** The old version of this repository was retired alongside the MathJax CDN; see #39.
+
+## Third Party Extensions
+
+* [arabic.js](https://github.com/Edraak/arabic-mathjax-dev)
+  * TeX input extension that provides basic Arabic support.
+* [mhchem](https://github.com/mhchem/MathJax-mhchem) 
+  * TeX input extension for typesetting chemical equations, by the maintainer of the original `mhchem` LaTeX package.
+* [img](https://github.com/pkra/mathjax-img/)
+  * TeX input extension for using images
+* [xyjax](https://github.com/sonoisa/XyJax)
+  * TeX input extension for typesetting `xypic` diagrams.
+* [siunitx](https://github.com/burnpanck/MathJax-third-party-extensions/tree/master/siunitx)
+  * TeX input extension implementing much of the `siunitx` LaTeX package.
+* [physics](https://github.com/ickc/MathJax-third-party-extensions/tree/gh-pages/physics)
+  * TeX input extension implementing much of the `physics` LaTeX package.
+
+### Legacy extension
+
+You can find older (unmaintained) extensions in the `legacy` folder of this repository.
 
 ## Contributing
 
-We'd be thrilled to include your extension! 
+Add your extension! Simply create a pull request adding a link to `README.md`. 
 
-To add an extension, simply create a pull request. Please structure your contribution along the lines of existing extensions. In particular, make sure that
+Please structure your extension along the lines of existing third-party extensions. In particular, make sure that
 
-* Create a subfolder
-* Add a `README` file with some basic information on the extension (see other extensions for inspiration)
-* Add a `License.txt` file. We require Apache-license-2 comaptible licenses.
-* The `loadComplete` call in your extension should be of the form `[Contrib]/foldername/filename.js` to work generically with a third party location in MathJax v2.4+.
-* Preferably, contribute both a packed (using uglify, YUI etc) as well as an unpacked version; the unpacked version should be placed under `foldername/unpacked/` with a working `loadComplete` call.
+* Add a `README` file
+  * Include basic usage information for your extension (see other extensions for inspiration).
+* Add a license. 
+  * We require Apache-license-2-compatible licenses.
+* Custom path in `loadComplete` call
+  * The `loadComplete` call in your extension should be of the form `[myextension]/filename.js` to work generically with third party locations.
+  * **Note** a clash of your prefix with another extension's prefix will usually mean that people can't use both extensions at the same time.
+* Tag it!
+  * individual releases allow version specific loading from CDN providers.
 
+We also suggest submitting your extension to [cdnjs](https://cdnjs.com) and [jsdelivr](https://www.jsdelivr.com) -- and of course there's always [rawgit.com](https://rawgit.com).
 
 ## Using third party extensions.
 
-We host  copy of the third-party extension repository on the MathJax CDN. This means anything you contribute here will be easily available to all MathJax CDN users.
+For more details, [see the MathJax documentation](http://docs.mathjax.org/en/latest/options/ThirdParty.html#custom-extension-path-configuration).
 
-Since MathJax v2.7, MathJax simplifies loading third party extensions: just prefix the extension name with `[Contrib]` and the relative path in this repository.
-
-For example,
-
-    <script type="text/x-mathjax-config>
-      MathJax.Hub.Config({
-        extensions: ["tex2jax.js","[Contrib]/img/img.js"],
-        jax: ["input/TeX","output/HTML-CSS"],
-        tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
-      });
-    </script>
-    
-would load the `img` extension.
-
-If you are using MathJax v2.6 or below, you will need to define `[Contrib]` manually. 
-
-Either add
+A) Specify the path, e.g.,
 
     <script type="text/x-mathjax-config">
-      MathJax.Ajax.config.path["Contrib"] = "//cdn.mathjax.org/mathjax/contrib";
+      MathJax.Ajax.config.path["spiffy"] = "https://path/to/spiffy";
     </script>
 
 or equivalently,
@@ -47,12 +57,16 @@ or equivalently,
     <script type="text/javascript">
       window.MathJax = {
         AuthorInit: function () {
-                MathJax.Ajax.config.path["Contrib"] = "//cdn.mathjax.org/mathjax/contrib";
+                MathJax.Ajax.config.path["spiffy"] = "https://path/to/spiffy";
             }
       };
     </script>
 
-to your configuration. See also the [documentation page on third party extensions and this repository](http://docs.mathjax.org/en/latest/options/ThirdParty.html#mathjax-third-party-extension-repository).
+B) Add the extension to your configuration, e.g.,
+    
+    MathJax.Hub.Config({
+      extensions: ["[spiffy]/spiffy.js"]
+    });
 
 ## Writing extensions
 
