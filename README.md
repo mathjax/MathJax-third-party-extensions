@@ -15,7 +15,7 @@ A list of MathJax extensions provided by third-party contributors.
   * TeX input extension for using images
 * [xyjax](https://github.com/sonoisa/XyJax)
   * TeX input extension for typesetting `xypic` diagrams.
-* [siunitx](https://github.com/burnpanck/MathJax-third-party-extensions/tree/master/siunitx)
+* [siunitx](https://github.com/burnpanck/MathJax-siunitx)
   * TeX input extension implementing much of the `siunitx` LaTeX package.
 * [physics](https://github.com/ickc/MathJax-third-party-extensions/tree/gh-pages/physics)
   * TeX input extension implementing much of the `physics` LaTeX package.
