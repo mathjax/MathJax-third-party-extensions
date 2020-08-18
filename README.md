@@ -1,11 +1,13 @@
 mathjax-third-party-extensions
 ==============================
 
-A list of MathJax extensions provided by third-party contributors.
+A list of MathJax extensions provided by third-party contributors for MathJax version 2.
 
-**Note** The old version of this repository was retired alongside the MathJax CDN; see [#39](https://github.com/mathjax/MathJax-third-party-extensions/issues/39).
+**WARNING**: This repository is for version 2 of MathJax.  The API for extensions is quite different for version 3.  See the [MathJax Documentation](https://docs.mathjax.org/en/latest/advanced/extensions.html) for more on extensions in version 3.
 
-## Third Party Extensions
+**Note**: An older version of this repository was retired alongside the MathJax CDN in 2017; see [#39](https://github.com/mathjax/MathJax-third-party-extensions/issues/39).
+
+## Third Party Extensions for MathJax v2
 
 * [arabic.js](https://github.com/Edraak/arabic-mathjax-dev)
   * TeX input extension that provides basic Arabic support.
@@ -44,7 +46,7 @@ We also suggest submitting your extension to [cdnjs](https://cdnjs.com) and [jsd
 
 ## Using third party extensions.
 
-For more details, [see the MathJax documentation](http://docs.mathjax.org/en/latest/options/ThirdParty.html#custom-extension-path-configuration).
+For more details, [see the MathJax documentation](https://docs.mathjax.org/en/v2.7-latest/options/ThirdParty.html#custom-extension-path-configuration).
 
 A) Specify the path, e.g.,
 
@@ -76,6 +78,6 @@ MathJax.Hub.Config({
 
 ## Writing extensions
 
-The MathJax documentation [contains a tutorial on extension writing](http://docs.mathjax.org/en/latest/advanced/extension-writing.html).
+The MathJax documentation [contains a tutorial on extension writing](https://docs.mathjax.org/en/v2.7-latest/advanced/extension-writing.html).
 
-Afterwards, you might want to start by looking at some of the extensions here and [the MathJax core extensions](http://github.com/mathjax/MathJax/tree/master/unpacked/extensions).
+Afterwards, you might want to start by looking at some of the extensions here and [the MathJax core extensions](https://github.com/mathjax/MathJax/tree/legacy-v2/unpacked/extensions).
